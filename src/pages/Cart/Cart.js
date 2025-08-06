@@ -3,23 +3,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
-import { resetCart } from "../../redux/orebiSlice";
+import { resetCart } from "../../redux/amacificSlice";
 import { emptyCart } from "../../assets/images/index";
 import ItemCard from "./ItemCard";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.orebiReducer.products);
-  const [totalAmt, setTotalAmt] = useState("");
-  const [shippingCharge, setShippingCharge] = useState("");
+  
+  // Enhanced selector with error handling
+  const products = useSelector((state) => {
+    console.log("Redux state in Cart.js:", state);
+    if (!state.amacificReducer) {
+      console.warn("amacificReducer not found in state:", state);
+      return [];
+    }
+    return state.amacificReducer.products || [];
+  });
+
+  const [totalAmt, setTotalAmt] = useState(0);
+  const [shippingCharge, setShippingCharge] = useState(0);
+
+  // Calculate total amount
   useEffect(() => {
-    let price = 0;
-    products.map((item) => {
-      price += item.price * item.quantity;
-      return price;
-    });
+    const price = products.reduce((total, item) => {
+      return total + (item.price * item.quantity);
+    }, 0);
     setTotalAmt(price);
   }, [products]);
+
+  // Calculate shipping charge
   useEffect(() => {
     if (totalAmt <= 200) {
       setShippingCharge(30);
@@ -29,6 +41,7 @@ const Cart = () => {
       setShippingCharge(20);
     }
   }, [totalAmt]);
+
   return (
     <div className="max-w-container mx-auto px-4">
       <Breadcrumbs title="Cart" />
@@ -40,6 +53,7 @@ const Cart = () => {
             <h2>Quantity</h2>
             <h2>Sub Total</h2>
           </div>
+          
           <div className="mt-5">
             {products.map((item) => (
               <div key={item._id}>
@@ -68,6 +82,7 @@ const Cart = () => {
             </div>
             <p className="text-lg font-semibold">Update Cart</p>
           </div>
+
           <div className="max-w-7xl gap-4 flex justify-end mt-4">
             <div className="w-96 flex flex-col gap-4">
               <h1 className="text-2xl font-semibold text-right">Cart totals</h1>
