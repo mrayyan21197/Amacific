@@ -1,24 +1,15 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ReactPaginate from "react-paginate";
-import Product from "../../home/Products/Product";
-import { paginationItems } from "../../../constants";
+import ProductCard from "../../ProductCard";
+import { CATALOG } from "../../../constants/catalog";
 
-const items = paginationItems;
 function Items({ currentItems }) {
   return (
     <>
       {currentItems &&
         currentItems.map((item) => (
-          <div key={item._id} className="w-full">
-            <Product
-              _id={item._id}
-              img={item.img}
-              productName={item.productName}
-              price={item.price}
-              color={item.color}
-              badge={item.badge}
-              des={item.des}
-            />
+          <div key={item._id} className="w-full flex justify-center">
+            <ProductCard product={item} />
           </div>
         ))}
     </>
@@ -26,22 +17,19 @@ function Items({ currentItems }) {
 }
 
 const Pagination = ({ itemsPerPage }) => {
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
+  const items = useMemo(() => CATALOG, []);
+
   const [itemOffset, setItemOffset] = useState(0);
   const [itemStart, setItemStart] = useState(1);
 
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
-  const endOffset = itemOffset + itemsPerPage;
-  //   console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+  const endOffset = Math.min(itemOffset + itemsPerPage, items.length);
   const currentItems = items.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(items.length / itemsPerPage);
+  const pageCount = Math.max(1, Math.ceil(items.length / itemsPerPage));
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % items.length;
+    const newOffset =
+      items.length === 0 ? 0 : (event.selected * itemsPerPage) % items.length;
     setItemOffset(newOffset);
     // console.log(
     //   `User requested page number ${event.selected}, which is offset ${newOffset},`

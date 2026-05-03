@@ -1,27 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
+import React from "react";
+import { Link } from "react-router-dom";
+import SeoHead from "../../components/SeoHead";
+import PaymentMethodIcons from "../../components/PaymentMethodIcons";
 
 const About = () => {
-  const location = useLocation();
-  const [prevLocation, setPrevLocation] = useState("");
-  useEffect(() => {
-    setPrevLocation(location.state.data);
-  }, [location]);
   return (
-    <div className="max-w-container mx-auto px-4">
-      <Breadcrumbs title="About" prevLocation={prevLocation} />
-      <div className="pb-10">
-        <h1 className="max-w-[600px] text-base text-lightText mb-2">
-          <span className="text-primeColor font-semibold text-lg">Amacific</span>{" "}
-          is one of the world's leading ecommerce brands and is internationally
-          recognized for celebrating the essence of classic Worldwide cool
-          looking style.
-        </h1>
-        <Link to="/shop">
-          <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-            Continue Shopping
-          </button>
+    <div className="min-h-screen bg-white">
+      <SeoHead
+        title="About Amacific — Youth Marketplace Pakistan"
+        description="Amacific is Pakistan’s Gen-Z marketplace for one-cart shopping with verified sellers and nationwide COD."
+        canonicalPath="/about"
+      />
+
+      <div className="bg-navy text-white py-14 px-4">
+        <div className="max-w-container mx-auto">
+          <p className="text-brandOrange font-bold text-sm uppercase tracking-widest">Our story</p>
+          <h1 className="text-3xl md:text-5xl font-titleFont font-bold mt-3 max-w-3xl">
+            Pakistan’s youth-first one-stop online marketplace
+          </h1>
+          <p className="mt-6 text-white/80 max-w-2xl text-lg">
+            One cart. Every need. We blend Daraz-level assortment thinking with brand storytelling built for TikTok, Instagram,
+            and WhatsApp-native shoppers in Karachi, Lahore, Islamabad / Rawalpindi, Faisalabad, Multan & Hyderabad.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-container mx-auto px-4 py-14 grid md:grid-cols-2 gap-12">
+        <section className="space-y-4 text-gray-700 leading-relaxed">
+          <h2 className="text-2xl font-bold text-navy font-titleFont">Why we exist</h2>
+          <p>
+            Urban youth shouldn’t juggle five apps for earbuds, eyeliner, and exam-season stationery. Amacific centralises curated marketplace sellers behind one trustworthy checkout with COD, JazzCash, Easypaisa, Raast, and cards.
+          </p>
+          <p>
+            Launch plays like <strong>Found It Week</strong> and the <strong>Campus Cart Challenge</strong> aren’t gimmicks — they mirror how Pakistani students already discover brands on short-form video.
+          </p>
+        </section>
+        <section className="rounded-2xl border border-gray-100 bg-gray-50 p-8 space-y-4">
+          <h2 className="text-xl font-bold text-navy font-titleFont">Operational promises</h2>
+          <ul className="list-disc pl-5 text-gray-600 space-y-2">
+            <li>Verified seller badges & photo reviews</li>
+            <li>City-aware delivery messaging</li>
+            <li>7-day returns playbook on eligible SKUs</li>
+            <li>Mailchimp-powered lifecycle email + WhatsApp CS</li>
+          </ul>
+          <PaymentMethodIcons />
+        </section>
+      </div>
+
+      <div className="bg-brandOrange/10 border-y border-orange-100 py-10 px-4 text-center">
+        <Link to="/campaigns/found-it-week" className="inline-flex px-8 py-3 rounded-full bg-navy text-white font-bold hover:bg-navy-deep">
+          Shop Found It Week
         </Link>
       </div>
     </div>

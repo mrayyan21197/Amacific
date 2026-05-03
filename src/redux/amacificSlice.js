@@ -3,6 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   userInfo: [],
   products: [],
+  wishlist: [],
+  recentlyViewed: [],
+  appliedCoupon: null,
 };
 
 export const amacificSlice = createSlice({
@@ -46,6 +49,26 @@ export const amacificSlice = createSlice({
     },
     resetCart: (state) => {
       state.products = [];
+      state.appliedCoupon = null;
+    },
+    toggleWishlist: (state, action) => {
+      const id = action.payload._id;
+      const idx = state.wishlist.findIndex((w) => w._id === id);
+      if (idx >= 0) state.wishlist.splice(idx, 1);
+      else state.wishlist.push(action.payload);
+    },
+    addRecentlyViewed: (state, action) => {
+      const id = action.payload._id;
+      state.recentlyViewed = [
+        action.payload,
+        ...state.recentlyViewed.filter((p) => p._id !== id),
+      ].slice(0, 12);
+    },
+    setCoupon: (state, action) => {
+      state.appliedCoupon = action.payload;
+    },
+    clearCoupon: (state) => {
+      state.appliedCoupon = null;
     },
   },
 });
@@ -56,5 +79,9 @@ export const {
   drecreaseQuantity,
   deleteItem,
   resetCart,
+  toggleWishlist,
+  addRecentlyViewed,
+  setCoupon,
+  clearCoupon,
 } = amacificSlice.actions;
 export default amacificSlice.reducer;

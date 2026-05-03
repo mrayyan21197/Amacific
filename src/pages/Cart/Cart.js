@@ -1,151 +1,108 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
+import { motion, AnimatePresence } from "framer-motion";
 import { resetCart } from "../../redux/amacificSlice";
 import { emptyCart } from "../../assets/images/index";
-import ItemCard from "./ItemCard";
+import CartItem from "../../components/CartItem";
+import OrderSummary from "../../components/OrderSummary";
+import ShareCartWhatsApp from "../../components/ShareCartWhatsApp";
+import MailchimpSignupForm from "../../components/MailchimpSignupForm";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  
-  // Enhanced selector with error handling
-  const products = useSelector((state) => {
-    console.log("Redux state in Cart.js:", state);
-    if (!state.amacificReducer) {
-      console.warn("amacificReducer not found in state:", state);
-      return [];
-    }
-    return state.amacificReducer.products || [];
-  });
-
+  const products = useSelector((state) => state.amacificReducer.products);
   const [totalAmt, setTotalAmt] = useState(0);
   const [shippingCharge, setShippingCharge] = useState(0);
 
-  // Calculate total amount
   useEffect(() => {
-    const price = products.reduce((total, item) => {
-      return total + (item.price * item.quantity);
+    const sum = products.reduce((acc, item) => {
+      const unit = typeof item.price === "number" ? item.price : Number(item.price) || 0;
+      return acc + unit * item.quantity;
     }, 0);
-    setTotalAmt(price);
+    setTotalAmt(sum);
   }, [products]);
 
-  // Calculate shipping charge
   useEffect(() => {
-    if (totalAmt <= 200) {
-      setShippingCharge(30);
-    } else if (totalAmt <= 400) {
-      setShippingCharge(25);
-    } else if (totalAmt > 401) {
-      setShippingCharge(20);
-    }
+    if (totalAmt <= 0) setShippingCharge(0);
+    else if (totalAmt <= 2000) setShippingCharge(199);
+    else if (totalAmt <= 5000) setShippingCharge(149);
+    else setShippingCharge(99);
   }, [totalAmt]);
 
   return (
-    <div className="max-w-container mx-auto px-4">
-      <Breadcrumbs title="Cart" />
-      {products.length > 0 ? (
-        <div className="pb-20">
-          <div className="w-full h-20 bg-[#F5F7F7] text-primeColor hidden lgl:grid grid-cols-5 place-content-center px-6 text-lg font-titleFont font-semibold">
-            <h2 className="col-span-2">Product</h2>
-            <h2>Price</h2>
-            <h2>Quantity</h2>
-            <h2>Sub Total</h2>
-          </div>
-          
-          <div className="mt-5">
-            {products.map((item) => (
-              <div key={item._id}>
-                <ItemCard item={item} />
-              </div>
-            ))}
-          </div>
-
-          <button
-            onClick={() => dispatch(resetCart())}
-            className="py-2 px-10 bg-red-500 text-white font-semibold uppercase mb-4 hover:bg-red-700 duration-300"
-          >
-            Reset cart
-          </button>
-
-          <div className="flex flex-col mdl:flex-row justify-between border py-4 px-4 items-center gap-2 mdl:gap-0">
-            <div className="flex items-center gap-4">
-              <input
-                className="w-44 mdl:w-52 h-8 px-4 border text-primeColor text-sm outline-none border-gray-400"
-                type="text"
-                placeholder="Coupon Number"
-              />
-              <p className="text-sm mdl:text-base font-semibold">
-                Apply Coupon
-              </p>
-            </div>
-            <p className="text-lg font-semibold">Update Cart</p>
-          </div>
-
-          <div className="max-w-7xl gap-4 flex justify-end mt-4">
-            <div className="w-96 flex flex-col gap-4">
-              <h1 className="text-2xl font-semibold text-right">Cart totals</h1>
-              <div>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
-                  Subtotal
-                  <span className="font-semibold tracking-wide font-titleFont">
-                    ${totalAmt}
-                  </span>
-                </p>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
-                  Shipping Charge
-                  <span className="font-semibold tracking-wide font-titleFont">
-                    ${shippingCharge}
-                  </span>
-                </p>
-                <p className="flex items-center justify-between border-[1px] border-gray-400 py-1.5 text-lg px-4 font-medium">
-                  Total
-                  <span className="font-bold tracking-wide text-lg font-titleFont">
-                    ${totalAmt + shippingCharge}
-                  </span>
-                </p>
-              </div>
-              <div className="flex justify-end">
-                <Link to="/paymentgateway">
-                  <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-                    Proceed to Checkout
+    <div className="max-w-container mx-auto px-4 py-10 min-h-[600px]">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {products.length > 0 ? (
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Left Side: Cart Items */}
+            <div className="w-full lg:w-2/3">
+              <div className="flex flex-col gap-4 mb-6">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h2 className="text-2xl font-bold font-titleFont text-primeColor">Shopping Cart</h2>
+                  <button
+                    type="button"
+                    onClick={() => dispatch(resetCart())}
+                    className="text-red-500 hover:text-red-700 font-semibold text-sm uppercase transition-colors duration-300 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg"
+                  >
+                    Clear Cart
                   </button>
-                </Link>
+                </div>
+                <ShareCartWhatsApp />
               </div>
+
+              <div className="rounded-xl border border-orange-100 bg-orange-50/50 p-4 mb-6">
+                <p className="text-sm font-bold text-navy mb-2">Complete checkout faster — PKR 100 off</p>
+                <p className="text-xs text-gray-600 mb-3">Use code CART100 (Mailchimp mirrors this in abandoned cart emails).</p>
+                <MailchimpSignupForm tag="abandoned_cart_capture" audience="cart_recovery" compact buttonLabel="Email my cart" />
+              </div>
+
+              <AnimatePresence>
+                <div className="flex flex-col gap-4">
+                  {products.map((item) => (
+                    <CartItem key={item._id} item={item} />
+                  ))}
+                </div>
+              </AnimatePresence>
+            </div>
+
+            {/* Right Side: Order Summary */}
+            <div className="w-full lg:w-1/3">
+              <OrderSummary totalAmt={totalAmt} shippingCharge={shippingCharge} />
             </div>
           </div>
-        </div>
-      ) : (
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-col mdl:flex-row justify-center items-center gap-4 pb-20"
-        >
-          <div>
-            <img
-              className="w-80 rounded-lg p-4 mx-auto"
-              src={emptyCart}
-              alt="emptyCart"
-            />
-          </div>
-          <div className="max-w-[500px] p-4 py-8 bg-white flex gap-4 flex-col items-center rounded-md shadow-lg">
-            <h1 className="font-titleFont text-xl font-bold uppercase">
-              Your Cart feels lonely.
+        ) : (
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col items-center justify-center gap-6 py-20 text-center"
+          >
+            <div className="w-64 h-64 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+              <img
+                className="w-40 opacity-50"
+                src={emptyCart}
+                alt="emptyCart"
+              />
+            </div>
+            <h1 className="font-titleFont text-3xl font-bold text-primeColor">
+              Your Cart is Empty
             </h1>
-            <p className="text-sm text-center px-10 -mt-2">
-              Your Shopping cart lives to serve. Give it purpose - fill it with
-              books, electronics, videos, etc. and make it happy.
+            <p className="text-gray-500 max-w-md">
+              Looks like you haven't added anything to your cart yet. Explore our products and find something you love.
             </p>
             <Link to="/shop">
-              <button className="bg-primeColor rounded-md cursor-pointer hover:bg-black active:bg-gray-900 px-8 py-2 font-titleFont font-semibold text-lg text-gray-200 hover:text-white duration-300">
-                Continue Shopping
+              <button className="bg-indigo text-white rounded-full px-10 py-3 font-titleFont font-bold text-lg hover:bg-softBlue hover:shadow-lg transition-all duration-300 mt-4">
+                Start Shopping
               </button>
             </Link>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </motion.div>
     </div>
   );
 };

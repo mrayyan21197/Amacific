@@ -1,15 +1,18 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply font-bodyFont bg-white text-primeColor;
+  }
+}
+
 @layer components {
   .hoverEffect {
     @apply duration-300 cursor-pointer;
-  }
-  .headerSedenavLi {
-    @apply hover:underline underline-offset-2 cursor-pointer text-gray-300 hover:text-white;
   }
 }
 
@@ -30,5 +33,35 @@ nav .active li {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Homepage campaign carousel — slick dots (purple / white theme) */
+.home-campaign-carousel .slick-dots {
+  position: relative;
+  bottom: auto;
+  margin-top: 0;
+}
+.home-campaign-carousel .slick-dots li {
+  margin: 0 4px;
+  width: auto;
+  height: auto;
+}
+.home-campaign-carousel .slick-dots li button:before {
+  display: none;
+}
+.home-campaign-carousel .slick-dots li button.carousel-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: 9999px;
+  background-color: rgba(91, 33, 182, 0.35);
+  transition: transform 0.2s, background-color 0.2s;
+}
+.home-campaign-carousel .slick-dots li.slick-active button.carousel-dot {
+  background-color: #7c3aed;
+  transform: scale(1.2);
+}
+.home-campaign-carousel .slick-slide > div {
+  line-height: 0;
 }
 /* ============= NavLink active End here ================ */

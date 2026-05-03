@@ -1,26 +1,30 @@
 import React from "react";
-import { SplOfferData } from "../../../constants";
+import { Link } from "react-router-dom";
+import { filterDeals } from "../../../constants/catalog";
+import { formatPkr } from "../../../utils/format";
 
 const ProductsOnSale = () => {
+  const deals = filterDeals().slice(0, 5);
+
   return (
-    <div>
-      <h3 className="font-titleFont text-xl font-semibold mb-6 underline underline-offset-4 decoration-[1px]">
-        Products on sale
+    <div className="hidden xl:block">
+      <h3 className="font-titleFont text-xl font-semibold mb-6 text-navy border-b border-gray-200 pb-2">
+        Flash deals
       </h3>
-      <div className="flex flex-col gap-2">
-        {SplOfferData.map((item) => (
-          <div
+      <div className="flex flex-col gap-3">
+        {deals.map((item) => (
+          <Link
             key={item._id}
-            className="flex items-center gap-4 border-b-[1px] border-b-gray-300 py-2"
+            to={`/product/${item._id}`}
+            state={{ item }}
+            className="flex items-center gap-3 border border-gray-100 rounded-xl p-2 hover:border-brandOrange bg-white"
           >
-            <div>
-              <img className="w-24" src={item.img} alt={item.img} />
+            <img className="w-16 h-16 object-cover rounded-lg" src={item.img} alt="" />
+            <div className="font-titleFont min-w-0">
+              <p className="text-sm font-semibold text-primeColor truncate">{item.productName}</p>
+              <p className="text-xs font-bold text-navy">{formatPkr(item.price)}</p>
             </div>
-            <div className="flex flex-col gap-2 font-titleFont">
-              <p className="text-base font-medium">{item.productName}</p>
-              <p className="text-sm font-semibold">${item.price}</p>
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
