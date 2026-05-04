@@ -6,6 +6,7 @@ import {
   drecreaseQuantity,
   increaseQuantity,
 } from "../../redux/amacificSlice";
+import { handleProductImageError } from "../../utils/productImageFallback";
 
 const ItemCard = ({ item }) => {
   const dispatch = useDispatch();
@@ -40,7 +41,12 @@ const ItemCard = ({ item }) => {
           onClick={handleDelete}
           className="text-primeColor hover:text-red-500 duration-300 cursor-pointer"
         />
-        <img className="w-32 h-32" src={item.image} alt={item.name || 'Product'} />
+        <img
+          className="w-32 h-32"
+          src={item.image}
+          alt={item.name || "Product"}
+          onError={handleProductImageError}
+        />
         <h1 className="font-titleFont font-semibold">{item.name}</h1>
       </div>
       <div className="col-span-5 mdl:col-span-3 flex items-center justify-between py-4 mdl:py-0 px-4 mdl:px-0 gap-6 mdl:gap-0">

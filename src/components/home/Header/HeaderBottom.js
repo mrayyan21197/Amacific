@@ -6,6 +6,7 @@ import Flex from "../../designLayouts/Flex";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { paginationItems } from "../../../constants";
+import { handleProductImageError } from "../../../utils/productImageFallback";
 
 const HeaderBottom = () => {
   const products = useSelector((state) => state.amacificReducer.products);
@@ -114,7 +115,12 @@ const HeaderBottom = () => {
                     key={item._id}
                     className="max-w-[600px] h-28 bg-gray-100 mb-3 flex items-center gap-3"
                   >
-                    <img className="w-24" src={item.img} alt="productImg" />
+                    <img
+                      className="w-24"
+                      src={item.img}
+                      alt="productImg"
+                      onError={handleProductImageError}
+                    />
                     <div className="flex flex-col gap-1">
                       <p className="font-semibold text-lg">{item.productName}</p>
                       <p className="text-xs">{item.des}</p>

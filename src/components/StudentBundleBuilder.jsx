@@ -7,6 +7,7 @@ import { addToCart } from "../redux/amacificSlice";
 import { filterStudentEssentials, getStudentEssentialsPoolIds } from "../constants/catalog";
 import { formatPkr } from "../utils/format";
 import { trackEvent } from "../utils/analytics";
+import { handleProductImageError } from "../utils/productImageFallback";
 
 const BUDGET = 3000;
 
@@ -103,7 +104,12 @@ export default function StudentBundleBuilder() {
                 className="flex gap-3 rounded-xl border border-gray-100 bg-gray-50/50 p-3 hover:border-violet-200 transition-colors"
               >
                 <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-white border border-gray-100">
-                  <img src={p.img} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={p.img}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    onError={handleProductImageError}
+                  />
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col">
                   <p className="font-bold text-primeColor text-sm leading-snug line-clamp-2">{p.productName}</p>

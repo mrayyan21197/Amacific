@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { filterDeals } from "../../../constants/catalog";
 import { formatPkr } from "../../../utils/format";
+import { handleProductImageError } from "../../../utils/productImageFallback";
 
 const ProductsOnSale = () => {
   const deals = filterDeals().slice(0, 5);
@@ -19,7 +20,12 @@ const ProductsOnSale = () => {
             state={{ item }}
             className="flex items-center gap-3 border border-gray-100 rounded-xl p-2 hover:border-brandOrange bg-white"
           >
-            <img className="w-16 h-16 object-cover rounded-lg" src={item.img} alt="" />
+            <img
+              className="w-16 h-16 object-cover rounded-lg"
+              src={item.img}
+              alt=""
+              onError={handleProductImageError}
+            />
             <div className="font-titleFont min-w-0">
               <p className="text-sm font-semibold text-primeColor truncate">{item.productName}</p>
               <p className="text-xs font-bold text-navy">{formatPkr(item.price)}</p>

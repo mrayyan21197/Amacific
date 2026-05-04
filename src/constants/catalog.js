@@ -122,7 +122,7 @@ export const CATALOG = [
   {
     _id: "ap-107",
     productName: "Hardcover Notebook Set",
-    img: "https://images.unsplash.com/photo-1544816155-12df96455518?q=80&w=1888&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=1200&auto=format&fit=crop",
     price: 449,
     color: "Assorted",
     badge: true,
@@ -168,7 +168,7 @@ export const CATALOG = [
   {
     _id: "ap-110",
     productName: "Portable Bluetooth Speaker",
-    img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e2?q=80&w=2070&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1200&auto=format&fit=crop",
     price: 3299,
     compareAt: 4299,
     color: "Blue",
@@ -275,7 +275,7 @@ export const CATALOG = [
   {
     _id: "ap-118",
     productName: "Remote Control Car",
-    img: "https://images.unsplash.com/photo-1594787318286-1109ffd992e3?q=80&w=2070&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1200&auto=format&fit=crop",
     price: 2199,
     compareAt: 2799,
     color: "Red",

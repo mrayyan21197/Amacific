@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { FaShoppingCart, FaHeart, FaRegHeart } from "react-icons/fa";
 import { formatPkr } from "../utils/format";
 import { trackEvent } from "../utils/analytics";
+import { handleProductImageError } from "../utils/productImageFallback";
 
 const ProductCard = ({ product, analyticsList }) => {
   const dispatch = useDispatch();
@@ -73,6 +74,7 @@ const ProductCard = ({ product, analyticsList }) => {
               src={product.img}
               alt=""
               loading="lazy"
+              onError={handleProductImageError}
             />
           </div>
         </Link>

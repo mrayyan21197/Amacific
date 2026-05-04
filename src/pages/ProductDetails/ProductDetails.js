@@ -16,6 +16,7 @@ import {
 import { addToCart, toggleWishlist, addRecentlyViewed } from "../../redux/amacificSlice";
 import { formatPkr } from "../../utils/format";
 import { trackEvent } from "../../utils/analytics";
+import { handleProductImageError } from "../../utils/productImageFallback";
 import { FaHeart, FaRegHeart, FaStar, FaShieldAlt, FaUndo } from "react-icons/fa";
 
 function normalizeProduct(raw) {
@@ -137,6 +138,7 @@ const ProductDetails = () => {
               className="w-full rounded-xl object-cover aspect-square bg-gray-100"
               src={product.img}
               alt={product.productName}
+              onError={handleProductImageError}
             />
             {product.originalGuarantee && (
               <p className="mt-3 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg px-3 py-2 inline-block">

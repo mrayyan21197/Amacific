@@ -4,6 +4,7 @@ import { deleteItem, drecreaseQuantity, increaseQuantity } from "../redux/amacif
 import { FaTrash, FaMinus, FaPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { formatPkr } from "../utils/format";
+import { handleProductImageError } from "../utils/productImageFallback";
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -19,7 +20,12 @@ const CartItem = ({ item }) => {
     >
       <div className="flex items-center gap-4 w-full md:w-2/5">
         <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg bg-gray-50 border border-gray-200">
-          <img className="w-full h-full object-contain" src={item.image} alt={item.name} />
+          <img
+            className="w-full h-full object-contain"
+            src={item.image}
+            alt={item.name}
+            onError={handleProductImageError}
+          />
         </div>
         <div>
           <h3 className="text-lg font-bold text-primeColor font-titleFont">{item.name}</h3>
