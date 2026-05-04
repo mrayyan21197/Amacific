@@ -64,4 +64,141 @@ nav .active li {
 .home-campaign-carousel .slick-slide > div {
   line-height: 0;
 }
+.home-campaign-carousel .campaign-slide-inner {
+  line-height: normal;
+}
+.home-campaign-carousel .home-campaign-arrow {
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Review carousel — slick dots (slick-theme.css not imported; style explicitly) */
+.review-carousel .slick-dots {
+  position: relative;
+  bottom: auto;
+  margin: 0;
+  padding: 0;
+}
+.review-carousel .review-carousel-dots > ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.review-carousel .slick-dots li {
+  margin: 0;
+  width: auto;
+  height: auto;
+  display: inline-flex;
+}
+.review-carousel .slick-dots li button:before {
+  display: none !important;
+  content: none !important;
+}
+.review-carousel .slick-dots li button.review-carousel-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: 9999px;
+  background-color: rgba(234, 88, 12, 0.35);
+  border: none;
+  cursor: pointer;
+  font-size: 0;
+  line-height: 0;
+  text-indent: -9999px;
+  transition: transform 0.2s, background-color 0.2s;
+}
+.review-carousel .slick-dots li.slick-active button.review-carousel-dot {
+  background-color: #ea580c;
+  transform: scale(1.2);
+}
+.review-carousel .slick-slide > div {
+  line-height: 0;
+}
+.review-carousel .review-slide-inner {
+  line-height: normal;
+}
+
+/* Shared slick row carousels (value props, product row, promo banners) */
+.amacific-slider .slick-dots {
+  position: relative;
+  bottom: auto;
+  margin: 0;
+  padding: 0;
+}
+.amacific-slider .amacific-slider-dots > ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.amacific-slider .slick-dots li {
+  margin: 0;
+  width: auto;
+  height: auto;
+  display: inline-flex;
+}
+.amacific-slider .slick-dots li button:before {
+  display: none !important;
+  content: none !important;
+}
+.amacific-slider .slick-dots li button.amacific-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: 9999px;
+  background-color: rgba(234, 88, 12, 0.35);
+  border: none;
+  cursor: pointer;
+  font-size: 0;
+  line-height: 0;
+  text-indent: -9999px;
+  transition: transform 0.2s, background-color 0.2s;
+}
+.amacific-slider .slick-dots li.slick-active button.amacific-dot {
+  background-color: #ea580c;
+  transform: scale(1.2);
+}
+.amacific-slider .slick-slide > div {
+  line-height: 0;
+}
+.amacific-slider .slide-inner-value,
+.amacific-slider .product-row-slide-inner,
+.amacific-slider .promo-banner-slide-inner {
+  line-height: normal;
+}
+
+/* Premium homepage hero (Embla) — film grain + autoplay progress */
+.amapacific-hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+@keyframes amapacific-hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.amapacific-hero-progress {
+  transform-origin: left center;
+  animation: amapacific-hero-progress 6s linear forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .amapacific-hero-progress {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
 /* ============= NavLink active End here ================ */

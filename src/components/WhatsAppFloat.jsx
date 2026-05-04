@@ -12,7 +12,7 @@ export default function WhatsAppFloat({ number = DEFAULT_WA, message = "Hi Amaci
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-20 right-4 z-[90] md:bottom-8 md:right-8 flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 transition-transform"
+      className="fixed bottom-28 right-4 z-[90] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-105 sm:bottom-24 md:bottom-10 md:right-8"
       aria-label="WhatsApp support"
       onClick={() => trackEvent("whatsapp_click", { placement: "floating_button" })}
     >

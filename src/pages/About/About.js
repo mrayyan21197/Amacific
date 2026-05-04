@@ -32,7 +32,7 @@ const About = () => {
             Urban youth shouldn’t juggle five apps for earbuds, eyeliner, and exam-season stationery. Amacific centralises curated marketplace sellers behind one trustworthy checkout with COD, JazzCash, Easypaisa, Raast, and cards.
           </p>
           <p>
-            Launch plays like <strong>Found It Week</strong> and the <strong>Campus Cart Challenge</strong> aren’t gimmicks — they mirror how Pakistani students already discover brands on short-form video.
+            Campaigns like <strong>One Cart, Full Life</strong> and <strong>Pakistan&apos;s Smartest Cart Challenge</strong> mirror how students and young pros already discover brands on short-form video — real carts, real savings.
           </p>
         </section>
         <section className="rounded-2xl border border-gray-100 bg-gray-50 p-8 space-y-4">
@@ -48,8 +48,8 @@ const About = () => {
       </div>
 
       <div className="bg-brandOrange/10 border-y border-orange-100 py-10 px-4 text-center">
-        <Link to="/campaigns/found-it-week" className="inline-flex px-8 py-3 rounded-full bg-navy text-white font-bold hover:bg-navy-deep">
-          Shop Found It Week
+        <Link to="/campaigns/one-cart-full-life" className="inline-flex px-8 py-3 rounded-full bg-navy text-white font-bold hover:bg-navy-deep">
+          Explore One Cart, Full Life
         </Link>
       </div>
     </div>

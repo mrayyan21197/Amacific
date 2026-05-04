@@ -1,7 +1,7 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 
-const ProductGrid = ({ products, title }) => {
+const ProductGrid = ({ products, title, analyticsList }) => {
     return (
         <div className="py-10">
             {title && (
@@ -10,9 +10,9 @@ const ProductGrid = ({ products, title }) => {
                     <div className="w-20 h-1 bg-indigo rounded-full"></div>
                 </div>
             )}
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 lgl:grid-cols-3 xl:grid-cols-4 gap-10">
+            <div className="grid w-full grid-cols-1 items-stretch gap-6 sm:gap-8 md:grid-cols-2 lgl:grid-cols-3 xl:grid-cols-4">
                 {products.map((product) => (
-                    <ProductCard key={product._id} product={product} />
+                    <ProductCard key={product._id} product={product} analyticsList={analyticsList} />
                 ))}
             </div>
         </div>

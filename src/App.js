@@ -5,6 +5,7 @@ import {
   createRoutesFromElements,
   Route,
   ScrollRestoration,
+  Navigate,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -29,9 +30,12 @@ import ContactSupport from "./pages/ContactSupport";
 import Checkout from "./pages/Checkout";
 import Deals from "./pages/Deals";
 import StudentEssentials from "./pages/StudentEssentials";
-import FoundItWeek from "./pages/campaigns/FoundItWeek";
-import CampusCartChallenge from "./pages/campaigns/CampusCartChallenge";
+import OneCartFullLife from "./pages/campaigns/OneCartFullLife";
+import SmartestCartChallenge from "./pages/campaigns/SmartestCartChallenge";
+import TrackOrder from "./pages/TrackOrder";
 import EmailSignupPopup from "./components/EmailSignupPopup";
+import WelcomeStripPopup from "./components/WelcomeStripPopup";
+import ChallengePeekPopup from "./components/ChallengePeekPopup";
 import ExitIntentPopup from "./components/ExitIntentPopup";
 import WhatsAppFloat from "./components/WhatsAppFloat";
 import RouteAnalytics from "./components/RouteAnalytics";
@@ -42,14 +46,14 @@ const Layout = () => {
       <RouteAnalytics />
       <Navbar />
       <ScrollRestoration />
-      <main className="flex-1">
+      <main className="flex-1 pb-28 md:pb-24">
         <Outlet />
       </main>
       <Footer />
-      {/* Welcome / FOUND200 email capture ~4.5s after load (session dismiss via EmailSignupPopup) */}
-      <EmailSignupPopup />
-      {/* Desktop-ish exit-intent (pointer leaves top of viewport); uses sessionStorage */}
+      <WelcomeStripPopup />
+      <ChallengePeekPopup />
       <ExitIntentPopup />
+      <EmailSignupPopup />
       <WhatsAppFloat />
     </div>
   );
@@ -70,8 +74,11 @@ const router = createBrowserRouter(
         <Route path="/essentials" element={<Essentials />} />
         <Route path="/deals" element={<Deals />} />
         <Route path="/student-essentials" element={<StudentEssentials />} />
-        <Route path="/campaigns/found-it-week" element={<FoundItWeek />} />
-        <Route path="/campaigns/campus-cart-challenge" element={<CampusCartChallenge />} />
+        <Route path="/campaigns/one-cart-full-life" element={<OneCartFullLife />} />
+        <Route path="/campaigns/smartest-cart-challenge" element={<SmartestCartChallenge />} />
+        <Route path="/campaigns/found-it-week" element={<Navigate to="/campaigns/one-cart-full-life" replace />} />
+        <Route path="/campaigns/campus-cart-challenge" element={<Navigate to="/campaigns/smartest-cart-challenge" replace />} />
+        <Route path="/track-order" element={<TrackOrder />} />
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blogs/:id" element={<BlogDetails />} />
         <Route path="/product/:_id" element={<ProductDetails />} />

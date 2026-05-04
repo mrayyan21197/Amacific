@@ -340,7 +340,7 @@ export function filterCategory(cat) {
   return CATALOG.filter((p) => p.category === cat);
 }
 
-/** IDs surfaced in Campus Cart / student bundle UI — expanded picks ≤ PKR 3k challenge */
+/** IDs surfaced in Smartest Cart / student bundle UI — expanded picks ≤ PKR 3k challenge */
 const STUDENT_ESSENTIAL_IDS = [
   "ap-116",
   "ap-107",

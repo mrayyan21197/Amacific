@@ -17,7 +17,7 @@ const Clothing = () => {
       <p>
         Fashion online across Pakistan blends campus streetwear with internship-ready basics — think breathable tees, backpacks, and sneakers that pop on TikTok hauls.
         Amacific keeps youthful sizing notes transparent and surfaces verified sellers so Karachi humidity picks don’t melt before beach weekends.
-        Layer FOUND200 on first carts during launch pushes or tap payday edits when “Salary aayi? Deals bhi aa gayi.” campaigns hit Meta feeds.
+        Use ONECART200 on your first Amacific order during One Cart, Full Life — then stack category deals under PKR 999 in the same checkout.
       </p>
     </CategoryPage>
   );

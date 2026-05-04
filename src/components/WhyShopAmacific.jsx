@@ -17,7 +17,7 @@ const points = [
   {
     icon: FaCreditCard,
     title: "JazzCash · Easypaisa · Raast · Cards",
-    desc: "Prepaid perks during payday waves.",
+    desc: "Prepaid checkout when you want to pay ahead of delivery.",
   },
   { icon: FaStar, title: "Real customer reviews", desc: "Photo reviews after verified buys." },
   { icon: FaLock, title: "Secure checkout", desc: "Encrypted flows & fraud monitoring." },
@@ -28,9 +28,9 @@ export default function WhyShopAmacific() {
     <div className="w-full py-20 bg-white border-y border-gray-100">
       <div className="max-w-container mx-auto px-4">
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold font-titleFont text-navy mb-3">Why shop with Amacific?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold font-titleFont text-navy mb-3">Shop Smart. Shop Verified.</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Built for Karachi nights, Lahore weddings, and Islamabad campus sprints — trust signals you can actually see.
+            Verified sellers, easy returns, COD, digital wallets, and secure checkout — built for how Pakistan shops online.
           </p>
           <div className="w-20 h-1 bg-brandOrange rounded-full mx-auto mt-4" />
         </div>

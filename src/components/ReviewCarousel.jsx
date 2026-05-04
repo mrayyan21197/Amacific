@@ -5,12 +5,12 @@ import { FaStar } from "react-icons/fa";
 const reviews = [
   {
     name: "Ayesha — Karachi",
-    text: "COD was smooth and the earbuds arrived in 3 days. Pakaging looked legit.",
+    text: "COD was smooth and the earbuds arrived in 3 days. Packaging looked legit.",
     rating: 5,
   },
   {
     name: "Hassan — Lahore",
-    text: "Finally one cart instead of five apps. Payday deals actually hit different.",
+    text: "Finally one cart instead of five apps. Deals under 999 actually hit different.",
     rating: 5,
   },
   {
@@ -35,28 +35,43 @@ export default function ReviewCarousel() {
     autoplay: true,
     autoplaySpeed: 5200,
     arrows: false,
+    appendDots: (dots) => (
+      <div className="review-carousel-dots mt-6 flex justify-center">
+        <ul className="m-0 flex list-none flex-row flex-wrap items-center justify-center gap-2 p-0">{dots}</ul>
+      </div>
+    ),
+    customPaging: (i) => (
+      <button
+        type="button"
+        className="review-carousel-dot"
+        aria-label={`Go to review ${i + 1}`}
+      />
+    ),
   };
 
   return (
     <div className="max-w-container mx-auto px-4 py-16">
       <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold font-titleFont text-navy">
-          Real orders. Real reviews.
+        <h2 className="text-3xl md:text-4xl font-bold font-titleFont text-slate-900">
+          Real orders.{" "}
+          <span className="text-orange-600">Real reviews.</span>
         </h2>
-        <p className="text-gray-600 mt-2">Young shoppers across Pakistan are checking out with Amacific.</p>
+        <p className="text-slate-600 mt-2 max-w-xl mx-auto">
+          Young shoppers across Pakistan are checking out with Amacific.
+        </p>
       </div>
-      <div className="max-w-2xl mx-auto">
+      <div className="review-carousel max-w-2xl mx-auto">
         <Slider {...settings}>
           {reviews.map((r, i) => (
-            <div key={i} className="px-2 pb-8">
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
+            <div key={i} className="px-2">
+              <div className="review-slide-inner bg-white rounded-2xl border border-slate-200 shadow-sm p-8 text-center">
                 <div className="flex justify-center gap-1 text-amber-400 mb-4">
                   {[...Array(5)].map((_, j) => (
                     <FaStar key={j} className={j < r.rating ? "" : "text-gray-200"} />
                   ))}
                 </div>
-                <p className="text-gray-700 text-lg leading-relaxed">&ldquo;{r.text}&rdquo;</p>
-                <p className="mt-6 font-bold text-navy">{r.name}</p>
+                <p className="text-slate-700 text-lg leading-relaxed">&ldquo;{r.text}&rdquo;</p>
+                <p className="mt-6 font-bold text-slate-900">{r.name}</p>
               </div>
             </div>
           ))}

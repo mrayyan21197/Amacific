@@ -69,7 +69,7 @@ export default function FAQTrust() {
             </details>
             <details className="group">
               <summary className="cursor-pointer font-semibold text-gray-800">How do vouchers stack?</summary>
-              <p className="text-gray-600 text-sm mt-2">One promo per cart unless noted — FOUND200 targets first orders only.</p>
+              <p className="text-gray-600 text-sm mt-2">One promo per cart unless noted — ONECART200 applies to eligible first orders.</p>
             </details>
             <details className="group">
               <summary className="cursor-pointer font-semibold text-gray-800">How do I avoid fakes?</summary>

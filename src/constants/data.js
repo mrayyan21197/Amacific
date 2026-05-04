@@ -6,7 +6,7 @@ export const blogsData = [
     shortDescription:
       "Build a tight semester cart: bottles, lamps, backpacks & stationery — without bouncing between five apps.",
     fullContent:
-      "University life in Karachi, Lahore or Islamabad moves fast — so your shopping list should too. Start with an insulated bottle for humid commutes, a glare-free desk lamp for midnight assignments, and a padded backpack that respects your laptop.\n\nLook for verified sellers on marketplaces like Amacific so COD deliveries match what you saw online. Stack carts during payday pushes or Found It Week-style vouchers to stay under PKR 3,000.\n\nFinally, document your haul for TikTok or Instagram — challenge campaigns reward thoughtful carts when you tag the brand and use branded hashtags.",
+      "University life in Karachi, Lahore or Islamabad moves fast — so your shopping list should too. Start with an insulated bottle for humid commutes, a glare-free desk lamp for midnight assignments, and a padded backpack that respects your laptop.\n\nLook for verified sellers on marketplaces like Amacific so COD deliveries match what you saw online. Stack carts with ONECART200-style first-order vouchers and deals under PKR 999 to stay under PKR 3,000.\n\nFinally, document your haul for TikTok or Instagram — use #SmartestCartPakistan when you join Amacific challenges.",
     category: "Student life",
     date: "Apr 02, 2026",
   },
@@ -50,7 +50,7 @@ export const blogsData = [
     shortDescription:
       "Salary aayi? Deals bhi aa gayi — map out prepaid perks, bundles & hashtag launches.",
     fullContent:
-      "Payday pulses hit differently when rent clears and dopamine shopping spikes. Anchor big-ticket accessories first — sneakers, Bluetooth speakers, skincare sets — then sprinkle PKR 999 discoveries.\n\nPrepaid checkout via JazzCash, Easypaisa or Raast often unlocks stackable codes such as PAYDAY-style incentives; read banners closely.\n\nTrack influencer drops on TikTok & Instagram because Pakistani youth-first platforms sync campaigns with limited timers — pair urgency with realistic delivery estimates so riders don’t clash with weekend plans.",
+      "Big restock moments hit differently when you can do it in one cart. Anchor accessories first — sneakers, Bluetooth speakers, skincare sets — then sprinkle PKR 999 discoveries on Amacific.\n\nPrepaid checkout via JazzCash, Easypaisa or Raast keeps checkout fast; read offer banners for stack rules.\n\nTrack influencer drops on TikTok and Instagram — pair urgency with realistic delivery estimates so riders don’t clash with weekend plans.",
     category: "Deals",
     date: "Apr 22, 2026",
   },

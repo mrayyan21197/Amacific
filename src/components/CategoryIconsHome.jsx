@@ -18,12 +18,14 @@ const cats = [
   { label: "Essentials", to: "/essentials", Icon: FaShoppingBasket },
 ];
 
-export default function CategoryIconsHome() {
+export default function CategoryIconsHome({ hideHeading = false }) {
   return (
-    <div className="max-w-container mx-auto px-4 py-12">
-      <h2 className="text-center text-2xl md:text-3xl font-bold font-titleFont text-navy mb-8">
-        Shop by category
-      </h2>
+    <div className={`max-w-container mx-auto px-4 ${hideHeading ? "py-2" : "py-12"}`}>
+      {!hideHeading && (
+        <h2 className="text-center text-2xl md:text-3xl font-bold font-titleFont text-navy mb-8">
+          Shop by category
+        </h2>
+      )}
       <div className="flex gap-4 overflow-x-auto pb-2 justify-start md:justify-center scrollbar-thin">
         {cats.map(({ label, to, Icon }) => (
           <Link

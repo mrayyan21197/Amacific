@@ -17,7 +17,7 @@ export default function ExitIntentPopup() {
       if (sessionStorage.getItem(KEY)) return;
       sessionStorage.setItem(KEY, "1");
       setShow(true);
-      trackEvent("exit_intent_popup", {});
+      trackEvent("exit_intent_popup", { variant: "onecart" });
     };
 
     document.documentElement.addEventListener("mouseleave", onLeave);
@@ -39,39 +39,43 @@ export default function ExitIntentPopup() {
             initial={{ scale: 0.94, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.94, opacity: 0 }}
-            className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative"
+            className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl"
           >
             <button
               type="button"
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-800"
+              className="absolute right-4 top-4 text-gray-400 hover:text-gray-800"
               onClick={close}
               aria-label="Close"
             >
               <FaTimes />
             </button>
-            <p className="text-brandOrange font-bold text-xs uppercase">Wait — student fave</p>
-            <h3 className="text-xl font-titleFont font-bold text-navy mt-2">
-              Flat PKR 100 off your cart
-            </h3>
-            <p className="text-gray-600 text-sm mt-2">
-              Use code <strong>CART100</strong> before you go. Semester starting? We got you.
+            <p className="text-xs font-bold uppercase tracking-wide text-orange-600">Before you go</p>
+            <h3 className="mt-2 font-titleFont text-xl font-bold text-slate-900">Take PKR 200 off your first order</h3>
+            <p className="mt-2 text-sm text-slate-600">
+              Use code <strong className="tracking-widest text-navy">ONECART200</strong> at checkout — one cart for fashion, tech, beauty &amp; more.
             </p>
-            <div className="flex flex-col gap-3 mt-6">
+            <div className="mt-6 flex flex-col gap-3">
               <Link
-                to="/cart"
+                to="/shop"
                 onClick={() => {
-                  trackEvent("referral_link_click", { target: "/cart", source: "exit_intent" });
+                  trackEvent("exit_intent_shop_click", {});
                   close();
                 }}
-                className="block text-center py-3 rounded-xl bg-navy text-white font-bold hover:bg-navy-deep"
+                className="block rounded-xl bg-navy py-3 text-center text-sm font-bold text-white hover:bg-navy-deep"
               >
-                Complete My Order
+                Continue to shop
               </Link>
-              <button
-                type="button"
-                onClick={close}
-                className="text-sm text-gray-500"
+              <Link
+                to="/campaigns/one-cart-full-life"
+                onClick={() => {
+                  trackEvent("hero_one_cart_cta_click", { cta: "exit_intent_campaign", source: "exit_intent" });
+                  close();
+                }}
+                className="block rounded-xl border-2 border-slate-200 py-3 text-center text-sm font-bold text-slate-800 hover:bg-slate-50"
               >
+                Read One Cart, Full Life
+              </Link>
+              <button type="button" onClick={close} className="text-sm text-slate-500 hover:text-slate-800">
                 Continue browsing
               </button>
             </div>

@@ -7,7 +7,7 @@ import { trackEvent } from "../utils/analytics";
 
 const Footer = () => {
   const socialClass =
-    "w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-lg hover:bg-violet-500 hover:scale-105 transition-all border border-white/10";
+    "w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-lg hover:bg-orange-500 hover:scale-105 transition-all border border-white/10";
 
   const onSocial = (platform) => trackEvent("referral_link_click", { target: platform, placement: "footer_bar" });
 
@@ -16,10 +16,10 @@ const Footer = () => {
       <div className="max-w-container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
         <div>
           <h3 className="text-2xl font-bold font-titleFont mb-2">Amacific</h3>
-          <p className="text-violet-200 text-sm font-semibold mb-3">You want it, we have it</p>
+          <p className="text-orange-200 text-sm font-semibold mb-3">You want it, we have it</p>
           <p className="text-zinc-400 text-sm leading-relaxed max-w-xs">
-            Pakistan’s youth-first one-stop marketplace — fashion, tech, beauty, stationery & student essentials with COD &
-            digital wallets.
+            Pakistan&apos;s youth-first one-stop marketplace — fashion, tech, beauty, stationery &amp; essentials in one cart.
+            COD &amp; digital wallets nationwide.
           </p>
         </div>
 
@@ -38,20 +38,40 @@ const Footer = () => {
             </li>
             <li>
               <Link to="/faq" className="hover:text-white">
-                FAQ / Trust
+                Help Center
+              </Link>
+            </li>
+            <li>
+              <Link to="/faq" className="hover:text-white">
+                Return Policy
+              </Link>
+            </li>
+            <li>
+              <Link to="/track-order" className="hover:text-white">
+                Track Order
               </Link>
             </li>
             <li>
               <Link to="/contact" className="hover:text-white">
-                Help Center / Contact
+                Contact / WhatsApp Support
               </Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h4 className="text-lg font-bold font-titleFont mb-4 text-violet-300">Shop & orders</h4>
+          <h4 className="text-lg font-bold font-titleFont mb-4 text-violet-300">Campaigns &amp; shop</h4>
           <ul className="flex flex-col gap-3 text-zinc-400 text-sm">
+            <li>
+              <Link to="/campaigns/one-cart-full-life" className="hover:text-white">
+                One Cart, Full Life
+              </Link>
+            </li>
+            <li>
+              <Link to="/campaigns/smartest-cart-challenge" className="hover:text-white">
+                Smartest Cart Challenge
+              </Link>
+            </li>
             <li>
               <Link to="/shop" className="hover:text-white">
                 All products
@@ -59,20 +79,12 @@ const Footer = () => {
             </li>
             <li>
               <Link to="/deals" className="hover:text-white">
-                Deals & Payday
+                Deals Under PKR 999
               </Link>
             </li>
             <li>
               <Link to="/student-essentials" className="hover:text-white">
                 Student Essentials
-              </Link>
-            </li>
-            <li>
-              <span className="cursor-pointer hover:text-white">Track Order</span>
-            </li>
-            <li>
-              <Link to="/faq" className="hover:text-white">
-                Return Policy
               </Link>
             </li>
           </ul>
@@ -82,9 +94,7 @@ const Footer = () => {
 
         <div>
           <h4 className="text-lg font-bold font-titleFont mb-4 text-violet-300">Newsletter</h4>
-          <p className="text-zinc-400 text-sm mb-4">
-            Payday drops + Campus Challenge reminders — Mailchimp-ready tags.
-          </p>
+          <p className="text-zinc-400 text-sm mb-4">First-order tips, deals under PKR 999, and challenge updates.</p>
           <MailchimpSignupForm tag="footer_newsletter" audience="general" buttonLabel="Sign up" />
           <p className="text-xs text-zinc-500 mt-4">
             <a href="mailto:support@amacific.pk" className="hover:text-violet-300">
@@ -95,9 +105,7 @@ const Footer = () => {
       </div>
 
       <div className="max-w-container mx-auto px-4 mt-14 pt-10 border-t border-white/10">
-        <p className="text-center text-sm font-semibold text-violet-200 mb-4 tracking-wide uppercase">
-          Follow Amacific
-        </p>
+        <p className="text-center text-sm font-semibold text-violet-200 mb-4 tracking-wide uppercase">Social media</p>
         <div className="flex flex-wrap justify-center gap-4 mb-6">
           <a
             href="https://www.facebook.com/amacific.pk"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
+import { trackEvent } from "../utils/analytics";
 import MailchimpSignupForm from "./MailchimpSignupForm";
 
 const STORAGE_KEY = "amacific_email_popup_dismissed";
@@ -46,32 +47,39 @@ export default function EmailSignupPopup() {
               >
                 <FaTimes />
               </button>
-              <p className="text-brandOrange font-bold text-sm uppercase tracking-wider mb-1">
-                Launch offer
-              </p>
+              <p className="text-orange-300 font-bold text-sm uppercase tracking-wider mb-1">One Cart, Full Life</p>
               <h2 id="popup-email-title" className="text-2xl font-titleFont font-bold">
                 Get PKR 200 Off Your First Amacific Order
               </h2>
               <p className="text-white/80 text-sm mt-2">
-                Join Amacific and discover Pakistan’s newest one-stop shopping platform.
+                Join Amacific and discover Pakistan&apos;s newest one-stop shopping platform.
               </p>
             </div>
             <div className="p-6 space-y-4">
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-center">
                 <p className="text-sm text-gray-600">Use code at checkout</p>
-                <p className="text-2xl font-bold text-navy tracking-widest mt-1">FOUND200</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard?.writeText("ONECART200").catch(() => {});
+                    trackEvent("onecart_promo_code_copy", { code: "ONECART200", source: "email_popup" });
+                  }}
+                  className="mt-1 w-full rounded-lg py-2 text-2xl font-bold text-navy tracking-widest hover:bg-gray-100"
+                >
+                  ONECART200
+                </button>
+                <p className="text-xs text-gray-500 mt-1">Tap to copy</p>
               </div>
               <MailchimpSignupForm
-                tag="welcome_discount"
-                audience="FOUND200"
+                tag="welcome_onecart"
+                audience="ONECART200"
                 compact
                 buttonLabel="Claim My Discount"
+                showStudentChallengeOptIn
+                signupExtraEvent="email_signup_onecart"
+                optInLight
               />
-              <button
-                type="button"
-                onClick={dismiss}
-                className="w-full text-sm text-gray-500 hover:text-gray-800"
-              >
+              <button type="button" onClick={dismiss} className="w-full text-sm text-gray-500 hover:text-gray-800">
                 Maybe later
               </button>
             </div>

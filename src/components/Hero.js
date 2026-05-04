@@ -44,7 +44,7 @@ const Hero = () => {
               <p className="text-sm text-white/80">Launch banner</p>
               <p className="font-bold text-lg mt-1">
                 Get <span className="text-brandOrange">PKR 200</span> off your first order — code{" "}
-                <span className="tracking-widest text-brandOrange">FOUND200</span>
+                <span className="tracking-widest text-brandOrange">ONECART200</span>
               </p>
             </div>
           </motion.div>

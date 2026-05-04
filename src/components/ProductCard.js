@@ -7,7 +7,7 @@ import { FaShoppingCart, FaHeart, FaRegHeart } from "react-icons/fa";
 import { formatPkr } from "../utils/format";
 import { trackEvent } from "../utils/analytics";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, analyticsList }) => {
   const dispatch = useDispatch();
   const wishlist = useSelector((s) => s.amacificReducer.wishlist);
   const loved = wishlist.some((w) => w._id === product._id);
@@ -43,83 +43,110 @@ const ProductCard = ({ product }) => {
     typeof product.price === "number" &&
     product.compareAt > product.price;
 
+  const productPath = `/product/${product._id}`;
+  const productState = { item: product };
+
+  const trackListClick = () => {
+    if (analyticsList) {
+      trackEvent(analyticsList, {
+        item_id: product._id,
+        item_name: product.productName,
+      });
+    }
+  };
+
   return (
-    <div className="w-full relative group">
-      <Link to={`/product/${product._id}`} state={{ item: product }}>
-        <div className="max-w-80 max-h-80 relative overflow-hidden rounded-xl shadow-md border border-gray-100 bg-white mx-auto">
-          <div className="min-h-[250px] flex items-center justify-center bg-gray-50 overflow-hidden">
+    <article className="group relative flex h-full w-full flex-col">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-slate-200/90 bg-slate-50 shadow-sm ring-1 ring-slate-900/5">
+        <Link
+          to={productPath}
+          state={productState}
+          aria-label={`View ${product.productName}`}
+          onClick={trackListClick}
+          className="block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2"
+        >
+          <div className="relative aspect-[4/5] w-full bg-slate-100">
             <motion.img
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.4 }}
-              className="w-full h-full object-cover object-center"
+              whileHover={{ scale: 1.04 }}
+              transition={{ duration: 0.35 }}
+              className="absolute inset-0 h-full w-full object-cover object-center"
               src={product.img}
-              alt={product.productName}
+              alt=""
+              loading="lazy"
             />
           </div>
+        </Link>
 
-          <div className="absolute top-4 left-4 flex flex-col gap-2">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="pointer-events-auto absolute left-3 top-3 z-20 flex max-w-[55%] flex-col gap-1.5">
             {product.badge && (
-              <span className="bg-brandOrange text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+              <span className="rounded-full bg-violet-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
                 Hot
               </span>
             )}
             {sale && (
-              <span className="bg-navy text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+              <span className="rounded-full bg-violet-800 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
                 Sale
               </span>
             )}
             {product.verifiedSeller && (
-              <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm uppercase tracking-wide">
+              <span className="rounded-full bg-emerald-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
                 Verified
               </span>
             )}
           </div>
 
-          <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
+          <div className="pointer-events-auto absolute right-3 top-3 z-20 flex flex-col gap-2">
             <motion.button
               type="button"
-              whileHover={{ scale: 1.08 }}
+              whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
               onClick={onWish}
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg text-navy hover:bg-brandOrange hover:text-white transition-colors duration-300"
-              aria-label="Wishlist"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-violet-800 shadow-md ring-1 ring-slate-200/80 transition-colors hover:bg-violet-600 hover:text-white"
+              aria-label={`Save ${product.productName} to wishlist`}
             >
               {loved ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.08 }}
+              type="button"
+              whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleAddToCart}
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg text-navy hover:bg-navy hover:text-white transition-colors duration-300"
-              title="Add to Cart"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-violet-800 shadow-md ring-1 ring-slate-200/80 transition-colors hover:bg-violet-700 hover:text-white"
+              aria-label={`Add ${product.productName} to cart`}
             >
               <FaShoppingCart />
             </motion.button>
           </div>
         </div>
-      </Link>
+      </div>
 
-      <div className="max-w-80 py-4 flex flex-col gap-1 px-2 mx-auto">
-        <div className="flex items-center justify-between font-titleFont gap-2">
-          <h2 className="text-lg text-primeColor font-bold truncate group-hover:text-navy duration-300">
+      <div className="mt-4 flex min-h-[6.25rem] flex-1 flex-col px-0.5">
+        <Link
+          to={productPath}
+          state={productState}
+          onClick={trackListClick}
+          className="flex flex-1 flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 rounded-md"
+        >
+          <h2 className="line-clamp-2 min-h-[3rem] font-titleFont text-base font-bold leading-snug text-slate-900 transition-colors group-hover:text-violet-800 md:text-lg md:leading-snug">
             {product.productName}
           </h2>
-        </div>
-        <div className="flex justify-between items-center flex-wrap gap-2">
-          <p className="text-[#767676] text-sm">{product.color}</p>
-          <div className="text-right">
-            {sale && (
-              <p className="text-xs text-gray-400 line-through">
-                {formatPkr(product.compareAt)}
+          <div className="mt-auto flex items-end justify-between gap-3 pt-3">
+            <p className="min-w-0 flex-1 text-sm font-medium leading-snug text-slate-600">{product.color}</p>
+            <div className="shrink-0 text-right tabular-nums">
+              {sale && (
+                <p className="text-sm font-semibold text-slate-500 line-through decoration-slate-400">
+                  {formatPkr(product.compareAt)}
+                </p>
+              )}
+              <p className="text-lg font-bold text-violet-700 md:text-xl">
+                {formatPkr(typeof product.price === "number" ? product.price : Number(product.price))}
               </p>
-            )}
-            <p className="text-navy text-lg font-bold">
-              {formatPkr(typeof product.price === "number" ? product.price : Number(product.price))}
-            </p>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
-    </div>
+    </article>
   );
 };
 

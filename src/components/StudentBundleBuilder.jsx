@@ -44,7 +44,7 @@ export default function StudentBundleBuilder() {
     if (next > BUDGET) {
       setBudgetModal({
         open: true,
-        message: `Adding ${p.productName} would put your Campus Cart Challenge haul over PKR ${BUDGET.toLocaleString("en-PK")}. Remove something from your cart or pick a smaller item.`,
+        message: `Adding ${p.productName} would put your Smartest Cart Challenge haul over PKR ${BUDGET.toLocaleString("en-PK")}. Remove something from your cart or pick a smaller item.`,
       });
       trackEvent("student_challenge_budget_block", { sku: p._id, challengeSubtotal, unit });
       return;
@@ -70,10 +70,10 @@ export default function StudentBundleBuilder() {
       <div className="absolute top-0 right-0 w-40 h-40 bg-violet-100/60 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
       <div className="relative">
-        <h3 className="text-xl font-titleFont font-bold text-navy mb-2">Campus Cart Challenge — fill your cart</h3>
+        <h3 className="text-xl font-titleFont font-bold text-navy mb-2">Smartest Cart Challenge — fill your cart</h3>
         <p className="text-gray-600 text-sm mb-4">
           Tap <strong>Add</strong> to drop essentials straight into your cart. Stay under PKR {BUDGET.toLocaleString("en-PK")}{" "}
-          for the challenge — we only count these picks toward your campus budget meter.
+          for #SmartestCartPakistan — we only count these picks toward your challenge budget meter.
         </p>
 
         <div className="rounded-xl border border-violet-200 bg-violet-50/80 px-4 py-3 mb-6">
@@ -134,7 +134,7 @@ export default function StudentBundleBuilder() {
             <FaShoppingCart /> View full cart
           </Link>
           <Link
-            to="/campaigns/campus-cart-challenge"
+            to="/campaigns/smartest-cart-challenge"
             className="text-sm font-semibold text-gray-600 hover:text-violet-700 underline underline-offset-2"
           >
             How the challenge works →
@@ -167,7 +167,7 @@ export default function StudentBundleBuilder() {
                   <p id="budget-modal-title" className="font-titleFont font-bold text-lg">
                     Over the PKR 3,000 challenge line
                   </p>
-                  <p className="text-white/85 text-sm mt-1">Campus Cart Challenge budget</p>
+                  <p className="text-white/85 text-sm mt-1">Smartest Cart Challenge budget</p>
                 </div>
                 <button
                   type="button"

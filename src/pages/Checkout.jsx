@@ -37,11 +37,9 @@ export default function Checkout() {
   const activeCode = (appliedCoupon || couponInput || "").trim().toUpperCase();
 
   const discount = useMemo(() => {
-    const r = computeCouponDiscount(activeCode, subtotal, {
-      prepaidOnly: payment !== "COD",
-    });
+    const r = computeCouponDiscount(activeCode, subtotal);
     return r.discount;
-  }, [activeCode, subtotal, payment]);
+  }, [activeCode, subtotal]);
 
   const total = Math.max(0, subtotal - discount + shipping);
 
@@ -58,10 +56,7 @@ export default function Checkout() {
 
   const applyCoupon = () => {
     const raw = couponInput.trim().toUpperCase();
-    const test =
-      raw === "PAYDAY"
-        ? computeCouponDiscount("PAYDAY", subtotal, { prepaidOnly: payment !== "COD" })
-        : computeCouponDiscount(raw, subtotal, {});
+    const test = computeCouponDiscount(raw, subtotal);
     if (test.matched && test.discount > 0) {
       dispatch(setCoupon(raw));
       trackEvent("coupon_used", { code: raw, discount: test.discount });
@@ -200,7 +195,7 @@ export default function Checkout() {
                 </button>
               </div>
               <p className="text-xs text-gray-500">
-                PAYDAY adds extra 10% off prepaid orders (max PKR 500) when applied while JazzCash / card / Raast is selected.
+                Try <strong className="text-navy">ONECART200</strong> on your first order (PKR 200 off cart, capped at subtotal). Other codes may apply at checkout when valid.
               </p>
               <div className="flex gap-3">
                 <button type="button" onClick={() => setStep(1)} className="flex-1 py-3 rounded-xl border font-bold">
@@ -237,7 +232,7 @@ export default function Checkout() {
               </div>
               <label className="flex items-start gap-2 text-xs text-gray-600">
                 <input type="checkbox" defaultChecked readOnly className="mt-1" />
-                Email me review reminders & payday deals (Mailchimp — toggled from marketing prefs in production).
+                Email me order updates & Amacific offers (manage preferences anytime).
               </label>
             </div>
           )}

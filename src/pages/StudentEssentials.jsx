@@ -44,7 +44,7 @@ export default function StudentEssentials() {
           Shopping student essentials online in Pakistan should feel as easy as ordering food after midnight — Amacific bundles hostel staples,
           mobile accessories, and stationery so young shoppers in Karachi, Lahore, Islamabad, Faisalabad, Multan, and Hyderabad can rebuild a semester cart without hopping between five apps.
           Whether you need insulated bottles for humid afternoons or desk lamps for finals week crunch, filter budgets under PKR 3,000 and pair them with nationwide COD, JazzCash, Easypaisa, Raast, and secure cards.
-          Bookmark this hub during payday waves for markdown bundles that mirror what performs on TikTok hauls and Instagram Stories.
+          Bookmark this hub during One Cart, Full Life and Smartest Cart pushes for bundles that mirror what performs on TikTok hauls and Instagram Stories.
         </p>
       </CategorySeo>
     </div>
