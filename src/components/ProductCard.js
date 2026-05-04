@@ -78,7 +78,7 @@ const ProductCard = ({ product, analyticsList }) => {
         </Link>
 
         <div className="pointer-events-none absolute inset-0">
-          <div className="pointer-events-auto absolute left-3 top-3 z-20 flex max-w-[55%] flex-col gap-1.5">
+          <div className="pointer-events-auto absolute left-2.5 top-2.5 z-20 flex max-w-[60%] flex-col gap-1.5 sm:left-3 sm:top-3 sm:max-w-[55%]">
             {product.badge && (
               <span className="rounded-full bg-violet-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
                 Hot
@@ -96,13 +96,13 @@ const ProductCard = ({ product, analyticsList }) => {
             )}
           </div>
 
-          <div className="pointer-events-auto absolute right-3 top-3 z-20 flex flex-col gap-2">
+          <div className="pointer-events-auto absolute right-2.5 top-2.5 z-20 flex flex-col gap-2 sm:right-3 sm:top-3">
             <motion.button
               type="button"
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
               onClick={onWish}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-violet-800 shadow-md ring-1 ring-slate-200/80 transition-colors hover:bg-violet-600 hover:text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-violet-800 shadow-md ring-1 ring-slate-200/80 transition-colors hover:bg-violet-600 hover:text-white sm:h-10 sm:w-10"
               aria-label={`Save ${product.productName} to wishlist`}
             >
               {loved ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
@@ -112,7 +112,7 @@ const ProductCard = ({ product, analyticsList }) => {
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleAddToCart}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-violet-800 shadow-md ring-1 ring-slate-200/80 transition-colors hover:bg-violet-700 hover:text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-violet-800 shadow-md ring-1 ring-slate-200/80 transition-colors hover:bg-violet-700 hover:text-white sm:h-10 sm:w-10"
               aria-label={`Add ${product.productName} to cart`}
             >
               <FaShoppingCart />
@@ -121,25 +121,25 @@ const ProductCard = ({ product, analyticsList }) => {
         </div>
       </div>
 
-      <div className="mt-4 flex min-h-[6.25rem] flex-1 flex-col px-0.5">
+      <div className="mt-3 flex min-h-[6rem] flex-1 flex-col px-0.5 sm:mt-4 sm:min-h-[6.25rem]">
         <Link
           to={productPath}
           state={productState}
           onClick={trackListClick}
           className="flex flex-1 flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 rounded-md"
         >
-          <h2 className="line-clamp-2 min-h-[3rem] font-titleFont text-base font-bold leading-snug text-slate-900 transition-colors group-hover:text-violet-800 md:text-lg md:leading-snug">
+          <h2 className="line-clamp-2 min-h-[2.8rem] font-titleFont text-[15px] font-bold leading-snug text-slate-900 transition-colors group-hover:text-violet-800 sm:min-h-[3rem] sm:text-base md:text-lg md:leading-snug">
             {product.productName}
           </h2>
-          <div className="mt-auto flex items-end justify-between gap-3 pt-3">
-            <p className="min-w-0 flex-1 text-sm font-medium leading-snug text-slate-600">{product.color}</p>
+          <div className="mt-auto flex items-end justify-between gap-2.5 pt-2.5 sm:gap-3 sm:pt-3">
+            <p className="min-w-0 flex-1 text-xs font-medium leading-snug text-slate-600 sm:text-sm">{product.color}</p>
             <div className="shrink-0 text-right tabular-nums">
               {sale && (
                 <p className="text-sm font-semibold text-slate-500 line-through decoration-slate-400">
                   {formatPkr(product.compareAt)}
                 </p>
               )}
-              <p className="text-lg font-bold text-violet-700 md:text-xl">
+              <p className="text-base font-bold text-violet-700 sm:text-lg md:text-xl">
                 {formatPkr(typeof product.price === "number" ? product.price : Number(product.price))}
               </p>
             </div>

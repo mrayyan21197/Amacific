@@ -32,6 +32,8 @@ const HERO_SLIDES = [
     secondaryEvent: { name: "student_essentials_click", params: { source: "home_hero" } },
     image:
       "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=85&w=2400&auto=format&fit=crop",
+    previewImage:
+      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=85&w=900&auto=format&fit=crop",
     glowFrom: "from-violet-600/90",
     glowVia: "via-fuchsia-500/40",
     glowTo: "to-orange-500/30",
@@ -54,6 +56,8 @@ const HERO_SLIDES = [
     secondaryEvent: { name: "product_under_999_click", params: { source: "home_hero" } },
     image:
       "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=85&w=2400&auto=format&fit=crop",
+    previewImage:
+      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=85&w=900&auto=format&fit=crop",
     glowFrom: "from-teal-950/88",
     glowVia: "via-indigo-950/58",
     glowTo: "to-violet-800/48",
@@ -85,6 +89,8 @@ const HERO_SLIDES = [
     secondaryEvent: { name: "product_under_999_click", params: { source: "home_hero" } },
     image:
       "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=85&w=2400&auto=format&fit=crop",
+    previewImage:
+      "https://images.unsplash.com/photo-1517336714739-489689fd1ca8?q=85&w=900&auto=format&fit=crop",
     glowFrom: "from-slate-900/90",
     glowVia: "via-violet-600/45",
     glowTo: "to-orange-500/35",
@@ -107,6 +113,8 @@ const HERO_SLIDES = [
     secondaryEvent: { name: "hero_one_cart_cta_click", params: { cta: "shop_all", source: "home_hero" } },
     image:
       "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=85&w=2400&auto=format&fit=crop",
+    previewImage:
+      "https://images.unsplash.com/photo-1445205170230-053b83016050?q=85&w=900&auto=format&fit=crop",
     glowFrom: "from-fuchsia-700/80",
     glowVia: "via-orange-400/30",
     glowTo: "to-violet-900/40",
@@ -131,6 +139,8 @@ const HERO_SLIDES = [
     secondaryEvent: { name: "product_under_999_click", params: { source: "home_hero" } },
     image:
       "https://images.unsplash.com/photo-1607082349566-187342175e2f?q=85&w=2400&auto=format&fit=crop",
+    previewImage:
+      "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?q=85&w=900&auto=format&fit=crop",
     glowFrom: "from-violet-800/88",
     glowVia: "via-amber-500/35",
     glowTo: "to-orange-600/38",
@@ -446,6 +456,14 @@ export default function HomeCampaignCarousel() {
     [emblaApi]
   );
 
+  const handlePreviewImageError = useCallback((event) => {
+    const img = event.currentTarget;
+    const fallbackSrc = img.dataset.fallbackSrc;
+    if (!fallbackSrc) return;
+    if (img.src === fallbackSrc) return;
+    img.src = fallbackSrc;
+  }, []);
+
   const handlePointerMove = useCallback(
     (e) => {
       if (!sectionRef.current || reduceMotion) return;
@@ -562,11 +580,13 @@ export default function HomeCampaignCarousel() {
               aria-label={`Previous: ${prevPreview.title}`}
             >
               <img
-                src={prevPreview.image}
+                src={prevPreview.previewImage || prevPreview.image}
                 alt=""
-                className="absolute inset-0 z-0 h-full w-full object-cover opacity-60 transition duration-300 group-hover:opacity-[0.88] group-hover:scale-[1.03]"
+                className="absolute inset-0 z-0 h-full w-full object-cover object-center opacity-75 transition duration-300 group-hover:opacity-95 group-hover:scale-[1.03]"
                 loading="eager"
                 decoding="async"
+                data-fallback-src={prevPreview.image}
+                onError={handlePreviewImageError}
               />
               <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/25" />
               <span className="pointer-events-none absolute bottom-3 left-1/2 z-[2] w-[90%] -translate-x-1/2 text-center text-[10px] font-bold uppercase tracking-wider text-white/90 drop-shadow-md">
@@ -587,9 +607,9 @@ export default function HomeCampaignCarousel() {
                     duration: reduceMotion ? 0.15 : 0.55,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className={`relative overflow-hidden rounded-3xl p-6 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:p-8 md:p-10 md:rounded-[2rem] ${
+                  className={`relative overflow-hidden rounded-3xl p-6 shadow-[0_24px_80px_-12px_rgba(0,0,0,0.65)] backdrop-blur-md sm:p-8 md:rounded-[2rem] md:p-10 ${
                     isStudentPanel
-                      ? "border border-emerald-500/35 bg-gradient-to-br from-slate-950/[0.94] via-slate-900/[0.92] to-indigo-950/88 ring-2 ring-white/10 shadow-[0_32px_100px_-24px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.09)]"
+                      ? "border border-neutral-200 bg-gradient-to-br from-white/95 to-neutral-100/95 text-neutral-800 ring-1 ring-black/5 shadow-xl shadow-black/10 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-white/10"
                       : "border border-white/15 bg-white/[0.08] ring-1 ring-white/10"
                   }`}
                 >
@@ -640,13 +660,13 @@ export default function HomeCampaignCarousel() {
 
                   <div className="relative z-[1]">
                     {isStudentPanel && Array.isArray(active.thumbStrip) && active.thumbStrip.length > 0 && (
-                      <div className="mb-6 rounded-2xl border border-white/12 bg-black/35 p-3 shadow-inner shadow-black/40 backdrop-blur-md sm:p-4">
+                      <div className="mb-6 rounded-2xl border border-neutral-200 bg-white/80 p-3 shadow-sm shadow-black/5 sm:p-4">
                         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                           <div className="flex -space-x-2 sm:-space-x-3">
                             {active.thumbStrip.map((src, i) => (
                               <div
                                 key={`${src}-${i}`}
-                                className="relative h-[52px] w-[52px] shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400/50 bg-slate-950 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.85)] ring-2 ring-black/40 sm:h-[58px] sm:w-[58px]"
+                                className="relative h-[52px] w-[52px] shrink-0 overflow-hidden rounded-xl border-2 border-teal-300/60 bg-white shadow-md shadow-black/10 ring-1 ring-black/5 sm:h-[58px] sm:w-[58px]"
                                 style={{ zIndex: active.thumbStrip.length - i }}
                               >
                                 <img
@@ -659,11 +679,11 @@ export default function HomeCampaignCarousel() {
                               </div>
                             ))}
                           </div>
-                          <div className="min-w-0 flex-1 border-l border-emerald-500/35 pl-3 sm:pl-4">
-                            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">
+                          <div className="min-w-0 flex-1 border-l border-neutral-300 pl-3 sm:pl-4">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-neutral-500">
                               Campus cart edits
                             </p>
-                            <p className="mt-1 text-xs leading-snug text-slate-100">
+                            <p className="mt-1 text-xs leading-snug text-neutral-600">
                               Desk · tech · bags — stack under-budget picks in one cart.
                             </p>
                           </div>
@@ -672,19 +692,23 @@ export default function HomeCampaignCarousel() {
                     )}
                     <p
                       className={`mb-3 text-[11px] font-bold uppercase tracking-[0.28em] sm:text-xs ${
-                        isStudentPanel ? "text-teal-300" : "text-orange-300/95"
+                        isStudentPanel ? "text-neutral-500" : "text-orange-300/95"
                       }`}
                     >
                       {active.eyebrow}
                     </p>
-                    <h2 className="font-titleFont text-3xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-4xl md:text-5xl">
+                    <h2
+                      className={`font-titleFont text-3xl font-extrabold leading-[1.08] tracking-tight sm:text-4xl md:text-5xl ${
+                        isStudentPanel ? "text-neutral-800" : "text-white"
+                      }`}
+                    >
                       <span className={isStudentPanel ? "[text-shadow:0_2px_24px_rgba(0,0,0,0.55)]" : ""}>
                         {active.title}
                       </span>
                       <span
                         className={
                           isStudentPanel
-                            ? "mt-1 block bg-gradient-to-r from-amber-300 via-orange-300 to-emerald-400 bg-clip-text font-extrabold text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.65)]"
+                            ? "mt-1 block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text font-extrabold text-transparent"
                             : "mt-1 block bg-gradient-to-r from-orange-300 via-amber-200 to-violet-200 bg-clip-text text-transparent"
                         }
                       >
@@ -693,7 +717,7 @@ export default function HomeCampaignCarousel() {
                     </h2>
                     <p
                       className={`mt-4 max-w-prose text-sm leading-relaxed sm:text-base ${
-                        isStudentPanel ? "text-slate-200/98 [text-shadow:0_1px_10px_rgba(0,0,0,0.35)]" : "text-slate-200/90"
+                        isStudentPanel ? "text-neutral-600" : "text-slate-200/90"
                       }`}
                     >
                       {active.subtitle}
@@ -738,9 +762,9 @@ export default function HomeCampaignCarousel() {
                         <Link
                           to={active.primaryTo}
                           onClick={() => trackEvent(active.primaryEvent.name, active.primaryEvent.params)}
-                          className={`inline-flex min-h-[52px] w-full items-center justify-center rounded-full px-8 py-3.5 text-center text-sm font-bold text-white shadow-[0_12px_40px_-8px_rgba(234,88,12,0.52)] ring-2 transition hover:brightness-110 sm:w-auto ${
+                          className={`inline-flex min-h-[52px] w-full items-center justify-center rounded-full px-8 py-3.5 text-center text-sm font-bold text-white shadow-[0_12px_40px_-8px_rgba(234,88,12,0.52)] ring-2 transition sm:w-auto ${
                             isStudentPanel
-                              ? "bg-gradient-to-r from-orange-500 via-orange-400 to-amber-500 ring-orange-300/45"
+                              ? "bg-gradient-to-r from-orange-500 to-yellow-400 ring-orange-300/45 hover:scale-105 hover:shadow-lg"
                               : "bg-gradient-to-r from-orange-500 to-orange-400 ring-white/20"
                           }`}
                         >
@@ -758,7 +782,7 @@ export default function HomeCampaignCarousel() {
                           onClick={() => trackEvent(active.secondaryEvent.name, active.secondaryEvent.params)}
                           className={`inline-flex min-h-[52px] w-full items-center justify-center rounded-full border-2 px-8 py-3.5 text-center text-sm font-bold backdrop-blur-sm transition sm:w-auto ${
                             isStudentPanel
-                              ? "border-teal-400/90 bg-slate-950/55 text-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)] hover:border-amber-300/95 hover:bg-slate-900/75 hover:text-amber-50"
+                              ? "border border-teal-400 bg-white text-teal-500 hover:bg-teal-50"
                               : "border-white/25 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
                           }`}
                         >
@@ -778,11 +802,13 @@ export default function HomeCampaignCarousel() {
               aria-label={`Next: ${nextPreview.title}`}
             >
               <img
-                src={nextPreview.image}
+                src={nextPreview.previewImage || nextPreview.image}
                 alt=""
-                className="absolute inset-0 z-0 h-full w-full object-cover opacity-60 transition duration-300 group-hover:opacity-[0.88] group-hover:scale-[1.03]"
+                className="absolute inset-0 z-0 h-full w-full object-cover object-center opacity-75 transition duration-300 group-hover:opacity-95 group-hover:scale-[1.03]"
                 loading="eager"
                 decoding="async"
+                data-fallback-src={nextPreview.image}
+                onError={handlePreviewImageError}
               />
               <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/25" />
               <span className="pointer-events-none absolute bottom-3 left-1/2 z-[2] w-[90%] -translate-x-1/2 text-center text-[10px] font-bold uppercase tracking-wider text-white/90 drop-shadow-md">
@@ -796,18 +822,38 @@ export default function HomeCampaignCarousel() {
         <button
           type="button"
           onClick={scrollPrev}
-          className="absolute left-2 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-950/70 text-white shadow-xl backdrop-blur-md transition hover:border-orange-400/50 hover:bg-slate-900/90 md:left-4 md:h-12 md:w-12 lgl:left-6"
+          className="group absolute left-2 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border border-white/20 text-white shadow-xl backdrop-blur-md transition hover:border-orange-400/60 md:left-4 md:h-12 md:w-12 lgl:left-6"
           aria-label="Previous slide"
         >
-          <FaChevronLeft className="text-sm" />
+          <img
+            src={prevPreview.previewImage || prevPreview.image}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center opacity-78 transition group-hover:scale-105 group-hover:opacity-95"
+            loading="eager"
+            decoding="async"
+            data-fallback-src={prevPreview.image}
+            onError={handlePreviewImageError}
+          />
+          <span className="absolute inset-0 bg-slate-950/42 transition group-hover:bg-slate-900/30" />
+          <FaChevronLeft className="relative z-[1] text-sm drop-shadow" />
         </button>
         <button
           type="button"
           onClick={scrollNext}
-          className="absolute right-2 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-slate-950/70 text-white shadow-xl backdrop-blur-md transition hover:border-orange-400/50 hover:bg-slate-900/90 md:right-4 md:h-12 md:w-12 lgl:right-6"
+          className="group absolute right-2 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border border-white/20 text-white shadow-xl backdrop-blur-md transition hover:border-orange-400/60 md:right-4 md:h-12 md:w-12 lgl:right-6"
           aria-label="Next slide"
         >
-          <FaChevronRight className="text-sm" />
+          <img
+            src={nextPreview.previewImage || nextPreview.image}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center opacity-78 transition group-hover:scale-105 group-hover:opacity-95"
+            loading="eager"
+            decoding="async"
+            data-fallback-src={nextPreview.image}
+            onError={handlePreviewImageError}
+          />
+          <span className="absolute inset-0 bg-slate-950/42 transition group-hover:bg-slate-900/30" />
+          <FaChevronRight className="relative z-[1] text-sm drop-shadow" />
         </button>
       </motion.div>
 

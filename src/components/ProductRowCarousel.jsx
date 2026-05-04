@@ -25,7 +25,14 @@ export default function ProductRowCarousel({ products, title, subtitle, analytic
       { breakpoint: 1024, settings: { slidesToShow: Math.min(2, products.length), slidesToScroll: 1, infinite: canLoop } },
       {
         breakpoint: 640,
-        settings: { slidesToShow: 1, slidesToScroll: 1, dots: products.length > 1, infinite: canLoop },
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          dots: products.length > 1,
+          infinite: canLoop,
+          centerMode: true,
+          centerPadding: "14px",
+        },
       },
     ],
   };
@@ -33,15 +40,15 @@ export default function ProductRowCarousel({ products, title, subtitle, analytic
   if (!products?.length) return null;
 
   return (
-    <section className="py-12" aria-label={title}>
+    <section className="py-10 sm:py-12" aria-label={title}>
       <div className="amacific-slider mx-auto max-w-container px-4">
-        <div className="mb-8 text-center md:text-left">
-          <h2 className="font-titleFont text-2xl font-bold text-slate-900 md:text-3xl">{title}</h2>
-          {subtitle && <p className="mt-2 text-slate-600">{subtitle}</p>}
+        <div className="mb-6 text-center md:mb-8 md:text-left">
+          <h2 className="font-titleFont text-xl font-bold text-slate-900 sm:text-2xl md:text-3xl">{title}</h2>
+          {subtitle && <p className="mt-2 text-sm text-slate-600 sm:text-base">{subtitle}</p>}
         </div>
         <Slider {...settings}>
           {products.map((p) => (
-            <div key={p._id} className="px-2 pb-2">
+            <div key={p._id} className="px-1.5 pb-2 sm:px-2">
               <div className="product-row-slide-inner h-full">
                 <ProductCard product={p} analyticsList={analyticsList} />
               </div>
