@@ -89,7 +89,7 @@ const HERO_SLIDES = [
     subtitle:
       "Create your Amacific account and unlock launch codes, drops, and challenge boosts before the crowd.",
     code: "ONECART200",
-    codeHint: "Tap to copy — first order",
+    codeHint: "First order discount",
     primaryCta: "Claim my perks",
     primaryTo: "/signup",
     primaryEvent: { name: "hero_member_signup_click", params: { source: "home_hero" } },
@@ -107,17 +107,16 @@ function handleHeroImageError(e) {
   el.src = HERO_IMAGE_FALLBACK;
 }
 
-const HeroEmblaSlide = memo(
-  function HeroEmblaSlide({ slide, index, isActive, onFirstMediaLoad }) {
+// Slide background with Ken Burns scale effect on active
+const HeroSlideBackground = memo(
+  function HeroSlideBackground({ slide, index, isActive, onFirstMediaLoad }) {
     return (
       <div
-        className={`relative min-h-[min(88vh,720px)] min-w-0 flex-[0_0_100%] select-none transition-[transform,opacity] duration-500 ease-out ${
-          isActive ? "scale-100 opacity-100" : "scale-95 opacity-70"
-        }`}
+        className="relative flex-[0_0_100%] min-w-0 select-none min-h-[min(90vh,760px)]"
         data-slide-id={slide.id}
       >
-        <div className="absolute inset-0">
-          <img
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.img
             src={slide.image}
             alt=""
             className="h-full w-full object-cover"
@@ -125,9 +124,28 @@ const HeroEmblaSlide = memo(
             loading={index === 0 ? "eager" : "lazy"}
             onLoad={index === 0 && onFirstMediaLoad ? onFirstMediaLoad : undefined}
             onError={handleHeroImageError}
+            animate={{ scale: isActive ? 1.0 : 1.07 }}
+            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
           />
         </div>
-        <div className="absolute inset-0 bg-black/50" aria-hidden />
+        {/* Directional gradient — heavy on left for text readability */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.08) 100%)",
+          }}
+          aria-hidden
+        />
+        {/* Bottom fade for control bar */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(13,17,23,0.75) 0%, transparent 40%)",
+          }}
+          aria-hidden
+        />
       </div>
     );
   },
@@ -138,22 +156,33 @@ const HeroEmblaSlide = memo(
     prev.onFirstMediaLoad === next.onFirstMediaLoad
 );
 
-const HeroCarouselDots = memo(function HeroCarouselDots({ slides, selectedIndex, onPick }) {
+// Animated progress bar segments — one per slide
+const HeroProgressBars = memo(function HeroProgressBars({ slides, selectedIndex, onPick }) {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2.5">
+    <div className="flex flex-1 gap-1.5 items-center" role="tablist" aria-label="Slide navigation">
       {slides.map((s, i) => (
         <button
           key={s.id}
           type="button"
+          role="tab"
           onClick={() => onPick(i)}
-          className={`rounded-full transition-transform duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#111827] ${
-            i === selectedIndex
-              ? "h-2.5 w-8 scale-100 bg-gradient-to-r from-orange-500 to-yellow-400 opacity-100"
-              : "h-2.5 w-2.5 scale-95 bg-white/50 opacity-70 hover:bg-white/70"
-          }`}
-          aria-label={`Go to slide ${i + 1}: ${s.title}`}
-          aria-current={i === selectedIndex ? "true" : undefined}
-        />
+          className="relative flex-1 h-[3px] rounded-full overflow-hidden bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent cursor-pointer"
+          aria-label={`Slide ${i + 1}: ${s.title}`}
+          aria-selected={i === selectedIndex}
+        >
+          {i === selectedIndex ? (
+            <motion.div
+              key={`${s.id}-${selectedIndex}`}
+              className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500 to-yellow-400"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              style={{ transformOrigin: "left center" }}
+              transition={{ duration: AUTOPLAY_MS / 1000, ease: "linear" }}
+            />
+          ) : (
+            <div className="absolute inset-0 rounded-full bg-white/0" />
+          )}
+        </button>
       ))}
     </div>
   );
@@ -165,6 +194,8 @@ export default function HomeCampaignCarousel() {
   const [direction, setDirection] = useState(1);
   const prevIndexRef = useRef(0);
   const [heroReady, setHeroReady] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const copyTimerRef = useRef(null);
 
   const autoplayPlugin = useMemo(
     () =>
@@ -180,7 +211,7 @@ export default function HomeCampaignCarousel() {
     {
       loop: true,
       align: "start",
-      duration: reduceMotion ? 0 : 28,
+      duration: reduceMotion ? 0 : 32,
       skipSnaps: false,
     },
     [autoplayPlugin]
@@ -222,6 +253,7 @@ export default function HomeCampaignCarousel() {
     emblaApi.plugins()?.autoplay?.play();
   }, [emblaApi]);
 
+  // Preload all slide images after first paint
   useEffect(() => {
     HERO_SLIDES.forEach((s, i) => {
       if (i === 0) return;
@@ -230,185 +262,283 @@ export default function HomeCampaignCarousel() {
     });
   }, []);
 
-  const onFirstMediaLoad = useCallback(() => {
-    setHeroReady(true);
+  // Cleanup copy timer on unmount
+  useEffect(() => () => clearTimeout(copyTimerRef.current), []);
+
+  const onFirstMediaLoad = useCallback(() => setHeroReady(true), []);
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((i) => emblaApi?.scrollTo(i), [emblaApi]);
+
+  const handleCopyCode = useCallback((code) => {
+    navigator.clipboard?.writeText(code).catch(() => {});
+    trackEvent("onecart_promo_code_copy", { code, source: "home_hero" });
+    setCopied(true);
+    clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2200);
   }, []);
 
-  const scrollPrev = useCallback(() => {
-    emblaApi?.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    emblaApi?.scrollNext();
-  }, [emblaApi]);
-
-  const scrollTo = useCallback(
-    (i) => {
-      emblaApi?.scrollTo(i);
-    },
-    [emblaApi]
-  );
-
-  const contentVariants = useMemo(
+  // Stagger container: direction-aware slide-in, children stagger on enter
+  const wrapVariants = useMemo(
     () => ({
-      enter: (dir) => ({
+      hidden: (dir) => ({
         opacity: 0,
-        y: reduceMotion ? 0 : dir >= 0 ? 20 : -20,
+        x: reduceMotion ? 0 : dir > 0 ? 52 : -52,
       }),
-      center: { opacity: 1, y: 0 },
+      show: {
+        opacity: 1,
+        x: 0,
+        transition: {
+          duration: reduceMotion ? 0.1 : 0.55,
+          ease: [0.22, 1, 0.36, 1],
+          staggerChildren: reduceMotion ? 0 : 0.075,
+          delayChildren: reduceMotion ? 0 : 0.06,
+        },
+      },
       exit: (dir) => ({
         opacity: 0,
-        y: reduceMotion ? 0 : dir >= 0 ? -16 : 16,
+        x: reduceMotion ? 0 : dir > 0 ? -36 : 36,
+        transition: { duration: reduceMotion ? 0.1 : 0.28, ease: [0.55, 0, 1, 0.45] },
       }),
     }),
     [reduceMotion]
   );
 
+  // Each child item rises in from below
+  const itemVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: reduceMotion ? 0 : 20 },
+      show: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: reduceMotion ? 0.1 : 0.5, ease: [0.22, 1, 0.36, 1] },
+      },
+      exit: { opacity: 0, y: reduceMotion ? 0 : -10 },
+    }),
+    [reduceMotion]
+  );
+
+  const slideLabel = useMemo(
+    () =>
+      `${String(selectedIndex + 1).padStart(2, "0")} / ${String(slideCount).padStart(2, "0")}`,
+    [selectedIndex, slideCount]
+  );
+
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-[#111827] text-white"
+      className="relative isolate w-full overflow-hidden bg-[#0d1117] text-white"
       aria-label="Featured campaigns"
     >
-      <div className="relative w-full">
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex touch-pan-y">
-            {HERO_SLIDES.map((slide, index) => (
-              <HeroEmblaSlide
-                key={slide.id}
-                slide={slide}
-                index={index}
-                isActive={index === selectedIndex}
-                onFirstMediaLoad={onFirstMediaLoad}
-              />
-            ))}
-          </div>
+      {/* Embla viewport — images */}
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex touch-pan-y">
+          {HERO_SLIDES.map((slide, index) => (
+            <HeroSlideBackground
+              key={slide.id}
+              slide={slide}
+              index={index}
+              isActive={index === selectedIndex}
+              onFirstMediaLoad={onFirstMediaLoad}
+            />
+          ))}
         </div>
-
-        <motion.div
-          className="pointer-events-none absolute inset-0 z-[15] bg-[#111827]"
-          initial={false}
-          animate={{ opacity: heroReady ? 0 : 0.35 }}
-          transition={{ duration: 0.45 }}
-          aria-hidden
-        />
-
-        <div className="pointer-events-none absolute inset-0 z-20 flex items-center">
-          <div className="pointer-events-auto mx-auto w-full max-w-container px-4 py-16 text-left sm:px-6 md:py-20 lg:px-8 lg:py-24">
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={active.id}
-                custom={direction}
-                variants={contentVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  duration: reduceMotion ? 0.12 : 0.45,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="max-w-2xl"
-              >
-                {Array.isArray(active.thumbStrip) && active.thumbStrip.length > 0 && (
-                  <div className="mb-6 flex gap-2">
-                    {active.thumbStrip.map((src, i) => (
-                      <img
-                        key={`${src}-${i}`}
-                        src={src}
-                        alt=""
-                        className="h-14 w-14 rounded-lg border border-white/40 object-cover sm:h-16 sm:w-16"
-                        loading="lazy"
-                        decoding="async"
-                        onError={handleHeroImageError}
-                      />
-                    ))}
-                  </div>
-                )}
-                <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/90 sm:text-sm">
-                  {active.eyebrow}
-                </p>
-                <h2 className="font-titleFont text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl">
-                  <span className="block">{active.title}</span>
-                  <span className="mt-2 block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent sm:mt-1">
-                    {active.titleAccent}
-                  </span>
-                </h2>
-                <p className="mt-4 max-w-prose text-lg leading-relaxed text-white/80">{active.subtitle}</p>
-
-                {active.code && (
-                  <div className="mt-6 rounded-xl border border-white/40 bg-black/50 px-4 py-3 text-sm font-semibold text-white">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigator.clipboard?.writeText(active.code).catch(() => {});
-                        trackEvent("onecart_promo_code_copy", { code: active.code, source: "home_hero" });
-                      }}
-                      className="w-full text-left"
-                    >
-                      {active.codeHint}
-                      <span className="mt-1 block font-mono text-lg tracking-[0.18em] text-yellow-300">
-                        {active.code}
-                      </span>
-                      <span className="text-xs font-medium text-white/70">Tap to copy</span>
-                    </button>
-                  </div>
-                )}
-
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                  <Link
-                    to={active.primaryTo}
-                    onClick={() => trackEvent(active.primaryEvent.name, active.primaryEvent.params)}
-                    className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-yellow-400 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg transition hover:scale-105 hover:shadow-xl sm:min-h-[52px]"
-                  >
-                    {active.primaryCta}
-                  </Link>
-                  <Link
-                    to={active.secondaryTo}
-                    onClick={() => trackEvent(active.secondaryEvent.name, active.secondaryEvent.params)}
-                    className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-white/40 px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10 sm:min-h-[52px]"
-                  >
-                    {active.secondaryCta}
-                  </Link>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={scrollPrev}
-          className="absolute left-3 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/40 text-white transition hover:bg-white/10 md:left-5 md:h-12 md:w-12"
-          aria-label="Previous slide"
-        >
-          <FaChevronLeft className="text-sm" />
-        </button>
-        <button
-          type="button"
-          onClick={scrollNext}
-          className="absolute right-3 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/40 text-white transition hover:bg-white/10 md:right-5 md:h-12 md:w-12"
-          aria-label="Next slide"
-        >
-          <FaChevronRight className="text-sm" />
-        </button>
       </div>
 
-      <div className="relative z-30 border-t border-white/10 bg-[#111827] px-4 py-4">
-        <div className="mx-auto max-w-container space-y-4">
-          <div
-            className="h-[3px] w-full overflow-hidden rounded-full bg-white/10"
-            role="progressbar"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(((selectedIndex + 1) / slideCount) * 100)}
-            aria-label="Carousel autoplay progress"
+      {/* Initial load mask */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-[15] bg-[#0d1117]"
+        initial={false}
+        animate={{ opacity: heroReady ? 0 : 0.55 }}
+        transition={{ duration: 0.55 }}
+        aria-hidden
+      />
+
+      {/* Slide counter — top right */}
+      <div
+        className="pointer-events-none absolute top-5 right-5 z-30 hidden sm:flex items-center gap-1.5 select-none"
+        aria-hidden
+      >
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={selectedIndex}
+            className="text-white font-mono font-bold text-sm tabular-nums"
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.25 }}
           >
-            <div
-              key={`${selectedIndex}-${AUTOPLAY_MS}`}
-              className="h-full rounded-full bg-gradient-to-r from-orange-500 to-yellow-400 amapacific-hero-progress"
-              style={reduceMotion ? { width: "100%" } : undefined}
-            />
-          </div>
-          <HeroCarouselDots slides={HERO_SLIDES} selectedIndex={selectedIndex} onPick={scrollTo} />
+            {String(selectedIndex + 1).padStart(2, "0")}
+          </motion.span>
+        </AnimatePresence>
+        <span className="text-white/40 font-mono text-xs">/</span>
+        <span className="text-white/40 font-mono text-xs tabular-nums">
+          {String(slideCount).padStart(2, "0")}
+        </span>
+      </div>
+
+      {/* Content overlay */}
+      <div className="pointer-events-none absolute inset-0 z-20 flex items-center">
+        <div className="pointer-events-auto mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8 py-16 md:py-20 lg:py-24">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={active.id}
+              custom={direction}
+              variants={wrapVariants}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              className="max-w-2xl"
+            >
+              {/* Eyebrow with decorative accent */}
+              <motion.div variants={itemVariants} className="mb-4 flex items-center gap-3">
+                <div className="h-px w-8 flex-shrink-0 bg-gradient-to-r from-orange-500 to-yellow-400 rounded-full" />
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-orange-400">
+                  {active.eyebrow}
+                </p>
+              </motion.div>
+
+              {/* Title */}
+              <motion.h2
+                variants={itemVariants}
+                className="font-titleFont text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white"
+              >
+                <span className="block">{active.title}</span>
+                <span className="mt-1 block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                  {active.titleAccent}
+                </span>
+              </motion.h2>
+
+              {/* Subtitle */}
+              <motion.p
+                variants={itemVariants}
+                className="mt-4 max-w-lg text-base sm:text-lg leading-relaxed text-white/72"
+              >
+                {active.subtitle}
+              </motion.p>
+
+              {/* Thumb strip */}
+              {Array.isArray(active.thumbStrip) && active.thumbStrip.length > 0 && (
+                <motion.div variants={itemVariants} className="mt-5 flex gap-2.5">
+                  {active.thumbStrip.map((src, i) => (
+                    <motion.img
+                      key={`${src}-${i}`}
+                      src={src}
+                      alt=""
+                      className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl border-2 border-white/25 object-cover shadow-xl"
+                      loading="lazy"
+                      decoding="async"
+                      onError={handleHeroImageError}
+                      whileHover={{ scale: 1.12, borderColor: "rgba(251,146,60,0.7)" }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  ))}
+                </motion.div>
+              )}
+
+              {/* Promo code */}
+              {active.code && (
+                <motion.div variants={itemVariants} className="mt-5">
+                  <button
+                    type="button"
+                    onClick={() => handleCopyCode(active.code)}
+                    className="group flex items-center gap-4 rounded-2xl border border-white/20 bg-white/[0.06] px-5 py-3.5 text-left backdrop-blur-sm hover:bg-white/[0.12] hover:border-white/30 transition-all w-full max-w-xs"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] uppercase tracking-widest text-white/50 mb-0.5">
+                        {active.codeHint}
+                      </p>
+                      <p className="font-mono text-xl font-bold tracking-[0.22em] text-yellow-300 truncate">
+                        {active.code}
+                      </p>
+                    </div>
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={copied ? "copied" : "copy"}
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.18 }}
+                        className={`text-[10px] font-bold uppercase tracking-widest flex-shrink-0 ${
+                          copied ? "text-green-400" : "text-white/40 group-hover:text-white/70"
+                        } transition-colors`}
+                      >
+                        {copied ? "Copied!" : "Tap to copy"}
+                      </motion.span>
+                    </AnimatePresence>
+                  </button>
+                </motion.div>
+              )}
+
+              {/* CTA buttons */}
+              <motion.div
+                variants={itemVariants}
+                className="mt-7 flex flex-col sm:flex-row gap-3"
+              >
+                <Link
+                  to={active.primaryTo}
+                  onClick={() => trackEvent(active.primaryEvent.name, active.primaryEvent.params)}
+                  className="inline-flex min-h-[50px] items-center justify-center rounded-2xl bg-gradient-to-r from-orange-500 to-yellow-400 px-7 py-3 text-sm font-bold text-white shadow-xl transition-all hover:scale-105 hover:-translate-y-0.5 hover:shadow-orange-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                >
+                  {active.primaryCta}
+                </Link>
+                <Link
+                  to={active.secondaryTo}
+                  onClick={() => trackEvent(active.secondaryEvent.name, active.secondaryEvent.params)}
+                  className="inline-flex min-h-[50px] items-center justify-center rounded-2xl border border-white/30 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/[0.1] hover:border-white/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                >
+                  {active.secondaryCta}
+                </Link>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Prev arrow */}
+      <motion.button
+        type="button"
+        onClick={scrollPrev}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="absolute left-3 md:left-5 top-1/2 z-30 -translate-y-1/2 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-sm transition-colors hover:bg-white/15 hover:border-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        aria-label="Previous slide"
+      >
+        <FaChevronLeft className="text-sm" />
+      </motion.button>
+
+      {/* Next arrow */}
+      <motion.button
+        type="button"
+        onClick={scrollNext}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="absolute right-3 md:right-5 top-1/2 z-30 -translate-y-1/2 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-sm transition-colors hover:bg-white/15 hover:border-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+        aria-label="Next slide"
+      >
+        <FaChevronRight className="text-sm" />
+      </motion.button>
+
+      {/* Bottom control bar: slide label + progress bars */}
+      <div className="relative z-30 border-t border-white/10 bg-[#0d1117]/80 backdrop-blur-md px-4 py-4">
+        <div className="mx-auto max-w-container flex items-center gap-4">
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={selectedIndex}
+              className="hidden sm:block text-xs font-mono tabular-nums text-white/35 shrink-0 w-10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              aria-hidden
+            >
+              {slideLabel}
+            </motion.span>
+          </AnimatePresence>
+          <HeroProgressBars
+            slides={HERO_SLIDES}
+            selectedIndex={selectedIndex}
+            onPick={scrollTo}
+          />
         </div>
       </div>
     </section>
